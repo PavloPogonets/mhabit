@@ -12,7 +12,7 @@ Sidebar is now available on the right — explore the listed pages.
 It includes a complete set of growth curves and charts to help you build habits more effectively,
 and keeps your data in sync across devices (currently via WebDAV, with more options coming soon).
 
-- [Installation Guide](mhabit/docs/wiki/Installation)
+- [Installation Guide](https://github.com/PavloPogonets/mhabit/blob/main/docs/wiki/Installation.md)
 - [Building](./Dev꞉-Build-From-Source)
 - [Donors](./Donors)
 
