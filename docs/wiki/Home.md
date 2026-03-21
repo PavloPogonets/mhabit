@@ -14,7 +14,7 @@ and keeps your data in sync across devices (currently via WebDAV, with more opti
 
 - [Installation Guide](https://github.com/PavloPogonets/mhabit/blob/main/docs/wiki/Installation.md)
 - [Building](./Dev꞉-Build-From-Source)
-- [Donors](../Donors)
+- [Donors](../Donors.md)
 
 Have some questions or found a BUG? Open a [github issue][github-issues].
 
