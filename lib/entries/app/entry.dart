@@ -30,13 +30,15 @@ import '../../l10n/localizations.dart';
 import '../../logging/helper.dart';
 import '../../models/app_sync_tasks.dart';
 import '../../models/app_theme_color.dart';
+import '../../models/habit_date.dart';
 import '../../pages/common/widgets.dart';
 import '../../pages/habits_display/page.dart' show HabitsDisplayPage;
-import '../../providers/app_debugger.dart';
-import '../../providers/app_language.dart';
-import '../../providers/app_reminder.dart';
-import '../../providers/app_sync.dart';
-import '../../providers/app_theme.dart';
+import '../../providers/app_ui/app_debugger.dart';
+import '../../providers/app_ui/app_language.dart';
+import '../../providers/app_ui/app_theme.dart';
+import '../../providers/workflow/app_reminder.dart';
+import '../../providers/workflow/app_sync.dart';
+import '../../providers/workflow/habits_manager.dart';
 import '../../reminders/notification_channel.dart';
 import '../../storage/db_helper_builder.dart';
 import '../../storage/profile/handlers.dart';
@@ -52,7 +54,7 @@ import 'providers.dart';
 /// Note: [AppProviders] are use to build providers that need to be initialized
 /// in [MaterialApp]. An important to note that, e.g., [Localizations] are
 /// initialized within MaterialApp. Some feature that depend on these inherited
-/// widgets can be initialized in [_AppPostInit].
+/// widgets can be initialized in [AppPostInit].
 class AppEntry extends StatelessWidget {
   static const _profileHandlers = <ProfileHandlerBuilder>[
     AppReminderProfileHandler.new,
@@ -67,6 +69,7 @@ class AppEntry extends StatelessWidget {
     FirstDayProfileHandler.new,
     HabitCellGestureModeProfileHandler.new,
     InputFillCacheProfileHandler.new,
+    CustomColorHistoryProfileHandler.new,
     CollectLogswitcherProfileHandler.new,
     LoggingLevelProfileHandler.new,
     AppLanguageProfileHanlder.new,
@@ -92,9 +95,7 @@ class AppEntry extends StatelessWidget {
         builder: (context, child) => DateChanger(
           interval: const Duration(seconds: 10),
           builder: (context) => const AppProviders(
-            child: _AppEntry(
-              homePage: _AppPostInit(child: HabitsDisplayPage()),
-            ),
+            child: _AppEntry(homePage: AppPostInit(child: HabitsDisplayPage())),
           ),
         ),
       ),
@@ -160,7 +161,7 @@ class _AppEntry extends StatelessWidget {
         return colorData != null ? Color(colorData) : themeMainColor;
       case InternalAppThemeColor():
         final colorType = themeColor.colorType;
-        return customColor?.getColor(colorType) ?? themeMainColor;
+        return customColor?.getBuiltInColor(colorType) ?? themeMainColor;
       default:
         return themeMainColor;
     }
@@ -222,7 +223,7 @@ class _AppEntry extends StatelessWidget {
             themeMode: transToMaterialThemeType(themeMode),
             language: language,
             lightThemeBuilder: () {
-              final customColor = modifedLightCustomColors;
+              final customColor = lightCustomColors;
               final mainColor = getThemeColor(
                 themeColor,
                 themeMainColor: themeMainColor,
@@ -275,44 +276,190 @@ class _AppEntry extends StatelessWidget {
   }
 }
 
-class _AppPostInit extends SingleChildStatefulWidget {
-  const _AppPostInit({required Widget child}) : super(child: child);
+final class _AppSyncPostInitBridge {
+  StreamSubscription<AppSyncNeedConfirmEvent>? _confirmSub;
+  AppLifecycleListener? _lifecycleListener;
+  AppSyncSettingsAccess? _settings;
+  AppSyncTriggerAccess? _trigger;
+  Stopwatch? _pauseStopwatch;
+
+  void sync(
+    BuildContext context, {
+    required L10n? l10n,
+    required Future<bool> Function(WebDavConfigTaskChecklist) onNeedCheck,
+  }) {
+    context.maybeRead<AppSyncWorkflowAccess>()?.onL10nUpdate(l10n);
+    _updateConfirmSubscription(context, onNeedCheck: onNeedCheck);
+    _updateLifecycleListener(context);
+  }
+
+  void dispose() {
+    _confirmSub?.cancel();
+    _lifecycleListener?.dispose();
+  }
+
+  void _updateConfirmSubscription(
+    BuildContext context, {
+    required Future<bool> Function(WebDavConfigTaskChecklist) onNeedCheck,
+  }) {
+    _confirmSub?.cancel();
+    final appSync = context.maybeRead<AppSyncWorkflowAccess>();
+    _confirmSub = appSync?.confirmEvents.listen(
+      (event) => switch (event) {
+        AppSyncNeedConfirmEvent<WebDavConfigTaskChecklist>() => onNeedCheck(
+          event.checklist,
+        ).then(event.complete),
+        _ => kDebugMode ? debugPrint("Unhandled event: $event") : null,
+      },
+    );
+  }
+
+  void _onPaused() {
+    _pauseStopwatch?.stop();
+    _pauseStopwatch = Stopwatch()..start();
+    appLog.appsync.debug("AppSyncLifecycleBridge", ex: ["App Paused"]);
+  }
+
+  void _onRestarted() {
+    Duration? stopDuration;
+    final stopwatch = _pauseStopwatch;
+    if (stopwatch != null && stopwatch.isRunning) {
+      stopwatch.stop();
+      stopDuration = stopwatch.elapsed;
+      _pauseStopwatch = null;
+      appLog.appsync.debug(
+        "AppSyncLifecycleBridge",
+        ex: ["App Resumed from Paused", stopDuration],
+      );
+    }
+    final interval = _settings?.fetchInterval.t;
+    if (interval != null && stopDuration != null) {
+      final window = Duration(microseconds: interval.inMicroseconds ~/ 2);
+      appLog.appsync.debug(
+        "AppSyncLifecycleBridge",
+        ex: ["Try re-sync after resumed", stopDuration, window],
+      );
+      if (stopDuration > window) {
+        _trigger?.delayedStartTaskOnce(delay: kAppSyncDelayDuration3);
+      }
+    }
+  }
+
+  void _updateLifecycleListener(BuildContext context) {
+    final settings = context.maybeRead<AppSyncSettingsAccess>();
+    final trigger = context.maybeRead<AppSyncTriggerAccess>();
+    if (identical(_settings, settings) && identical(_trigger, trigger)) return;
+
+    _lifecycleListener?.dispose();
+    _settings = settings;
+    _trigger = trigger;
+    if (settings == null || trigger == null) {
+      _lifecycleListener = null;
+      return;
+    }
+
+    _lifecycleListener = AppLifecycleListener(
+      onPause: _onPaused,
+      onRestart: _onRestarted,
+    );
+  }
+}
+
+bool _isDesktopReminderDateChangeEnabled() => switch (defaultTargetPlatform) {
+  TargetPlatform.linux ||
+  TargetPlatform.macOS ||
+  TargetPlatform.windows => true,
+  _ => false,
+};
+
+final class _HabitReminderPostInitBridge {
+  HabitsDisplayAccess? _access;
+  AppLifecycleListener? _lifecycleListener;
+  DateChangeNotifier? _dateChangeNotifier;
+  HabitDate? _lastDateTime;
+  String? _lastTzName;
+
+  void sync(BuildContext context) {
+    final access = context.maybeRead<HabitsDisplayAccess>();
+    final dateChangeNotifier = _isDesktopReminderDateChangeEnabled()
+        ? context.maybeRead<DateChangeNotifier>()
+        : null;
+    if (identical(_access, access) &&
+        identical(_dateChangeNotifier, dateChangeNotifier)) {
+      return;
+    }
+
+    _lifecycleListener?.dispose();
+    _dateChangeNotifier?.removeListener(_onDateChangeDetected);
+    _access = access;
+    _dateChangeNotifier = dateChangeNotifier;
+    if (access == null) {
+      _lifecycleListener = null;
+      _lastDateTime = null;
+      _lastTzName = null;
+      return;
+    }
+
+    _lifecycleListener = AppLifecycleListener(onRestart: _onRestarted);
+    if (dateChangeNotifier == null) {
+      _lastDateTime = null;
+      _lastTzName = null;
+      return;
+    }
+
+    _lastDateTime = dateChangeNotifier.dateTime;
+    _lastTzName = dateChangeNotifier.tzName;
+    dateChangeNotifier.addListener(_onDateChangeDetected);
+  }
+
+  void dispose() {
+    _lifecycleListener?.dispose();
+    _dateChangeNotifier?.removeListener(_onDateChangeDetected);
+  }
+
+  void _onRestarted() {
+    _access?.refreshHabitReminders(
+      params: const HabitReminderRefreshParams.restart(),
+    );
+  }
+
+  void _onDateChangeDetected() {
+    final access = _access;
+    final dateChangeNotifier = _dateChangeNotifier;
+    if (access == null || dateChangeNotifier == null) return;
+
+    final dateChanged = dateChangeNotifier.dateTime != _lastDateTime;
+    final tzChanged = dateChangeNotifier.tzName != _lastTzName;
+    if (!(dateChanged || tzChanged)) return;
+
+    _lastDateTime = dateChangeNotifier.dateTime;
+    _lastTzName = dateChangeNotifier.tzName;
+    access.refreshHabitReminders(
+      params: const HabitReminderRefreshParams.dateChange(),
+    );
+  }
+}
+
+class AppPostInit extends SingleChildStatefulWidget {
+  const AppPostInit({required Widget child, super.key}) : super(child: child);
 
   @override
   State<StatefulWidget> createState() => _AppPostInitState();
 }
 
-class _AppPostInitState extends SingleChildState<_AppPostInit> {
-  StreamSubscription<AppSyncNeedConfirmEvent>? _confirmSub;
+class _AppPostInitState extends SingleChildState<AppPostInit> {
+  final _appSyncBridge = _AppSyncPostInitBridge();
+  final _habitReminderBridge = _HabitReminderPostInitBridge();
+  bool _didHandlePostInit = false;
 
-  late bool inited;
-
-  @override
-  void initState() {
-    super.initState();
-    inited = false;
-  }
-
-  void _onL10nUpdate([L10n? l10n]) {
+  void _syncL10n([L10n? l10n]) {
     context.maybeRead<NotificationChannelData>()?.onL10nUpdate(l10n);
-    context.maybeRead<AppSyncViewModel>()?.onL10nUpdate(l10n);
-  }
-
-  void _onConfirmSubscriptionUpdate() {
-    _confirmSub?.cancel();
-    _confirmSub = context
-        .maybeRead<AppSyncViewModel>()
-        ?.appSyncTask
-        .confirmEvents
-        .listen(
-          (event) => switch (event) {
-            AppSyncNeedConfirmEvent<WebDavConfigTaskChecklist>() =>
-              _onWebDavAppSyncUserConfirmNeedCheck(
-                event.checklist,
-              ).then(event.complete),
-            _ => kDebugMode ? debugPrint("Unhandled event: $event") : null,
-          },
-        );
+    _habitReminderBridge.sync(context);
+    _appSyncBridge.sync(
+      context,
+      l10n: l10n,
+      onNeedCheck: _onWebDavAppSyncUserConfirmNeedCheck,
+    );
   }
 
   Future<bool> _onWebDavAppSyncUserConfirmNeedCheck(
@@ -328,31 +475,38 @@ class _AppPostInitState extends SingleChildState<_AppPostInit> {
 
   @override
   void didChangeDependencies() {
-    _onL10nUpdate(L10n.of(context));
-    _onConfirmSubscriptionUpdate();
     super.didChangeDependencies();
+    _syncL10n(L10n.of(context));
   }
 
   @override
   void dispose() {
-    _confirmSub?.cancel();
+    _habitReminderBridge.dispose();
+    _appSyncBridge.dispose();
     super.dispose();
   }
 
-  void onPostInitHandled(BuildContext context) {
+  void _handlePostInit(BuildContext context) {
     final l10n = L10n.of(context);
+    final reminderContent = AppReminderContent.maybeFromL10n(l10n);
     appLog.build.info(context, ex: ["onPostInitHandled", l10n]);
     context.maybeRead<AppDebuggerViewModel>()?.processDebuggingNotification(
       l10n,
     );
-    context.maybeRead<AppReminderViewModel>()?.processAppReminder(l10n);
-    _onL10nUpdate(L10n.of(context));
-    inited = true;
+    context.maybeRead<AppReminderAccess>()?.processTrigger(
+      const AppReminderTrigger.startup(),
+      content: reminderContent,
+    );
+    context.maybeRead<HabitsDisplayAccess>()?.refreshHabitReminders(
+      params: const HabitReminderRefreshParams.startup(),
+    );
+    _syncL10n(l10n);
+    _didHandlePostInit = true;
   }
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    if (!inited) onPostInitHandled(context);
+    if (!_didHandlePostInit) _handlePostInit(context);
     return child!;
   }
 }

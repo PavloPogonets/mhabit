@@ -2,6 +2,72 @@
 
 [中文](./docs/CHANGELOG/zh.md)
 
+## 1.25.2+167-pre
+
+- Update Hebrew translation, thanks to Omer I.S.'s contribution on Weblate (#589)
+- Update Turkish translation, thanks to Oğuz Ersen's contribution on Weblate (#589)
+- Add automated store submission pipelines (#590, #591, #592, #593)
+
+## 1.25.1+164
+
+- Feature: add per-habit custom color support with built-in swatches, color picker, and recent-color history (#580)
+
+## 1.24.5+161
+
+- Refactor page wiring, tidy unit tests, and simplify habit summary helpers (#563, #571)
+- Refactor reminder handling to improve stability on app start, restart, and day changes (#569)
+- Improve custom color palette with mhabit_color_builder (#572)
+- Fix duplicate habit detail refresh on back navigation (#565)
+- Update Hebrew load-error wording and refresh translations (#570)
+- Stabilize icon font generation and refresh icon assets for release (#574)
+
+## 1.24.4+160-pre
+
+- Improve habit reminder refresh and repair handling across app startup, restart, and date changes (#569)
+- Update Hebrew translation for the shared load-error message (#570)
+
+## 1.24.3+157-pre
+
+- Refactor provider architecture and page wiring, and add shared page load/error retry handling with related localization updates and expanded tests (#563)
+- Fix duplicate habit detail refresh when returning with Android predictive back (#565)
+
+## 1.24.2+156
+
+- Maintenance release to resolve a build issue affecting F-Droid distribution (#543, #544)
+- No user-facing changes in this version
+
+## 1.24.1+154
+
+- Add Basque; update Arabic, French, Hebrew, Turkish, and Traditional Chinese translations plus locale metadata and contributors (#523, #529)
+- Update store metadata, summary text, install wording, brand colors, and f_store registration asset (#519, #525, #529, #534)
+- Upgrade to Flutter 3.41.9 and refresh deps, generated files, lockfiles, release checks, and runtime integration (#540)
+- Fix App Sync iter type handling and theme colors (#540)
+- Update README and the builder wiki (#525, #540)
+
+## 1.24.0+153-pre
+
+- Upgrade Flutter to 3.41.9 and migrate required framework breaking changes
+- Update package dependencies, generated files, and Fastlane lockfiles
+- Update GitHub Actions/CI runtimes and add a Linux build check
+- Update iOS lifecycle integration and desktop native asset handling for newer toolchains
+- Fix App Sync server iter type handling
+- Fix theme colors
+- Update the source builder wiki
+
+## 1.23.12+152-pre
+
+- Add Basque translation resources and locale metadata, thanks to Txopi's contribution on GitHub (#523, #529)
+- Update Arabic, French, Hebrew, Turkish, and Traditional Chinese translations, thanks to contributors on Weblate (#529)
+- Update Android, iOS, macOS, and Windows localization metadata, contributors, and README/Installation wording (#519, #525, #529)
+- Add Android ADI registration asset for the f_store flavor
+- Update Flathub metainfo brand colors and summary (#534)
+
+## 1.23.11+151
+
+- Updated Czech translation, thanks to tenJirka's contribution on Weblate (#510)
+- Updated Hebrew translation and store descriptions, thanks to Omer I.S.'s contribution on Weblate (#510, #514)
+- Refactor README (#508 #509 #512)
+
 ## 1.23.8+148
 
 - Enable drag on search filter and page scrolling (#504)

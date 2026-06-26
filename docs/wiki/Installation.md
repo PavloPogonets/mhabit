@@ -10,14 +10,14 @@ from the [Release page][github-releases].
 
 Get [**Table Habit**](https://play.google.com/store/apps/details?id=io.github.friesi23.mhabit&referrer=utm_source%3Dappwiki)
 
-### F-Droid / LzzLzzyOnDroid
+### F-Droid / IzzyOnDroid
 
 - Stable Version
 - Install an Update from Store
 
 Search and download app using ["F-Droid App Store"][fdroid-app] or download by visiting:
 
-| ["F-Droid"][fdroid-myapp] | ["LzzLzzyOnDroid"][lzzyondroid-myapp] |
+| ["F-Droid"][fdroid-myapp] | ["IzzyOnDroid"][lzzyondroid-myapp] |
 
 ### Github: APK
 
@@ -68,6 +68,33 @@ or become a [Beta Tester](https://testflight.apple.com/join/aJ5PWqaR)
 Get [**Table Habit**](https://apps.apple.com/app/table-habit/id6744886469)
 or become a [Beta Tester](https://testflight.apple.com/join/aJ5PWqaR)
 
+### HomeBrew - mas
+
+- Stable Version
+- Install an Update by `mas upgrade` command
+
+> **Requires** [`mas`][mas-cli] (Mac App Store command line interface),
+> and you must be signed in to the Mac App Store with your Apple ID.
+
+1. Open `Terminal.app`.
+2. Install `mas` by running `brew install mas` (skip if already installed).
+3. Install **Table Habit** by running:
+
+```shell
+mas install 6744886469
+```
+
+Alternatively, install via [`Homebrew Bundle`][homebrew-bundle] with a `Brewfile`:
+
+```ruby
+brew "mas"
+mas "Table Habit", id: 6744886469
+```
+
+```shell
+brew bundle
+```
+
 ### HomeBrew - Custom Tap
 
 - Stable Version
@@ -82,6 +109,19 @@ or become a [Beta Tester](https://testflight.apple.com/join/aJ5PWqaR)
 brew install table-habit
 # for pre-release version, use:
 brew install table-habit@beta
+```
+
+Alternatively, install via [`Homebrew Bundle`][homebrew-bundle] with a `Brewfile`:
+
+```ruby
+tap "FriesI23/brew-repo"
+brew "table-habit"
+# for pre-release version, use:
+# brew "table-habit@beta"
+```
+
+```shell
+brew bundle
 ```
 
 ### Github: DMG
@@ -224,10 +264,12 @@ After operations above, this MSIX package should now be able to install successf
 [lzzyondroid-myapp]: https://apt.izzysoft.de/fdroid/index/apk/io.github.friesi23.mhabit
 [altstore]: https://altstore.io/
 [sidestore]: https://sidestore.io/
-[altstore-source]: https://play4fun.friesi23.cn/altstore-repo/pages/altstore.html
-[sidestore-source]: https://play4fun.friesi23.cn/altstore-repo/pages/sidestore.html
+[altstore-source]: https://friesi23.icu/altstore-repo/pages/altstore.html
+[sidestore-source]: https://friesi23.icu/altstore-repo/pages/sidestore.html
 [flathub-myapp]: https://flathub.org/apps/io.github.friesi23.mhabit
 [msix-install-cert]: https://www.advancedinstaller.com/install-test-certificate-from-msix.html
+[mas-cli]: https://github.com/mas-cli/mas
+[homebrew-bundle]: https://github.com/Homebrew/homebrew-bundle
 
 ---
 

@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/localizations.dart';
-import '../../providers/app_notify_config.dart';
+import '../../providers/workflow/app_notify_config.dart';
 import '../../reminders/notification_channel.dart';
 import '../../widgets/widgets.dart';
 
@@ -61,7 +61,7 @@ class _AppNotifyConfigView extends State<AppNotifyConfigView> {
         itemCount: _availableIds.length,
         itemBuilder: (context, index) {
           final channelId = _availableIds[index];
-          return Selector<AppNotifyConfigViewModel, bool>(
+          return Selector<AppNotifyConfigAccess, bool>(
             selector: (context, vm) =>
                 vm.notifyConfig.isChannelEnabled(channelId),
             shouldRebuild: (previous, next) => previous != next,
@@ -77,9 +77,9 @@ class _AppNotifyConfigView extends State<AppNotifyConfigView> {
                 subtitle: channelDesc != null ? Text(channelDesc) : null,
                 value: value,
                 onChanged: (value) {
-                  final config = context.read<AppNotifyConfigViewModel>();
+                  final config = context.read<AppNotifyConfigAccess>();
                   if (!config.mounted) return;
-                  config.updateNotifyConfig(
+                  config.updateConfig(
                     config.notifyConfig.copyWith({channelId: value}),
                   );
                 },

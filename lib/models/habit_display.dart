@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:collection';
-
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -48,12 +46,7 @@ enum HabitDisplaySortType implements EnumWithDBCode {
   static HabitDisplaySortType? getFromDBCode(
     int dbCode, {
     HabitDisplaySortType? withDefault = HabitDisplaySortType.manual,
-  }) {
-    for (var value in HabitDisplaySortType.values) {
-      if (value.dbCode == dbCode) return value;
-    }
-    return withDefault;
-  }
+  }) => HabitDisplaySortType.values.byDBCode(dbCode, withDefault: withDefault);
 
   static Iterable<HabitDisplaySortType> get menuOrderedList => const [
     HabitDisplaySortType.name,
@@ -79,12 +72,10 @@ enum HabitDisplaySortDirection implements EnumWithDBCode {
   static HabitDisplaySortDirection? getFromDBCode(
     int dbCode, {
     HabitDisplaySortDirection? withDefault = HabitDisplaySortDirection.asc,
-  }) {
-    for (var value in HabitDisplaySortDirection.values) {
-      if (value.dbCode == dbCode) return value;
-    }
-    return withDefault;
-  }
+  }) => HabitDisplaySortDirection.values.byDBCode(
+    dbCode,
+    withDefault: withDefault,
+  );
 }
 
 enum HabitDisplayEditMode { create, edit }
@@ -155,22 +146,18 @@ class HabitsDisplayFilter {
 
   JsonMap toJson() => _$HabitsDisplayFilterToJson(this);
 
-  bool Function(HabitSummaryData) getDisplayFilterFunction() {
-    bool func(HabitSummaryData data) {
-      if (data.isArchived) {
-        return allowArchivedHabits;
-      }
-      if (data.isComplated) {
-        return allowCompleteHabits;
-      }
-      if (data.isInProgress) {
-        return allowInProgressHabits;
-      }
-      return true;
+  bool Function(HabitSummaryData) get displayFilterFunction => (data) {
+    if (data.isArchived) {
+      return allowArchivedHabits;
     }
-
-    return func;
-  }
+    if (data.isComplated) {
+      return allowCompleteHabits;
+    }
+    if (data.isInProgress) {
+      return allowInProgressHabits;
+    }
+    return true;
+  };
 
   @override
   bool operator ==(Object other) {
@@ -222,16 +209,14 @@ class HabitDisplaySearchOptions {
   final String keyword;
   final bool activated;
   final bool completed;
-  final Set<HabitType> _types;
-
-  Set<HabitType> get types => UnmodifiableSetView(_types);
+  final Set<HabitType> types;
 
   const HabitDisplaySearchOptions({
     this.keyword = "",
     this.activated = false,
     this.completed = false,
-    Set<HabitType> types = const {},
-  }) : _types = types;
+    this.types = const {},
+  });
 
   const HabitDisplaySearchOptions.empty() : this();
 

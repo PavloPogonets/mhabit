@@ -1,12 +1,10 @@
-#!/bin/bash
-#
-# Copyright 2023 Fries_I23
+# Copyright 2026 Fries_I23
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,26 +12,57 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-flutter pub run icon_font_generator \
---from=assets/icons/sort_icons \
---class-name=HabitSortIcons \
---out-font=assets/fonts/sort_icons.ttf \
---out-flutter=lib/theme/_icons/sort_icons.g.dart
+set -euo pipefail
 
-flutter pub run icon_font_generator \
---from=assets/icons/calendar_icons \
---class-name=HabitCalIcons \
---out-font=assets/fonts/cal_icons.ttf \
---out-flutter=lib/theme/_icons/cal_icons.g.dart
+SCRIPT_PATH=$(dirname "$0")
+REPO_ROOT=$(cd "$SCRIPT_PATH/.." && pwd)
+TOOLS_DIR="$REPO_ROOT/tools"
 
-flutter pub run icon_font_generator \
---from=assets/icons/progress_icons \
---class-name=HabitProgressIcons \
---out-font=assets/fonts/progress_icons.ttf \
---out-flutter=lib/theme/_icons/progress_icons.g.dart
+if [[ -n "${DART:-}" ]]; then
+    DART_BIN="$DART"
+elif [[ -x "$REPO_ROOT/.flutter/bin/dart" ]]; then
+    DART_BIN="$REPO_ROOT/.flutter/bin/dart"
+elif command -v dart >/dev/null 2>&1; then
+    DART_BIN=dart
+else
+    echo "Dart SDK not found." >&2
+    exit 1
+fi
 
-flutter pub run icon_font_generator \
---from=assets/icons/common_icons \
---class-name=CommonIcons \
---out-font=assets/fonts/common_icons.ttf \
---out-flutter=lib/theme/_icons/common_icons.g.dart
+cd "$TOOLS_DIR" || exit 1
+
+run_icon_target() {
+    "$DART_BIN" run bin/gen_icons.dart "$@"
+}
+
+run_icon_target \
+    ../assets/icons/sort_icons \
+    ../assets/fonts/sort_icons.otf \
+    --output-class-file=../lib/theme/_icons/sort_icons.g.dart \
+    --class-name=HabitSortIcons \
+    --font-name=HabitSortIcons \
+    --format
+
+run_icon_target \
+    ../assets/icons/calendar_icons \
+    ../assets/fonts/cal_icons.otf \
+    --output-class-file=../lib/theme/_icons/cal_icons.g.dart \
+    --class-name=HabitCalIcons \
+    --font-name=HabitCalIcons \
+    --format
+
+run_icon_target \
+    ../assets/icons/progress_icons \
+    ../assets/fonts/progress_icons.otf \
+    --output-class-file=../lib/theme/_icons/progress_icons.g.dart \
+    --class-name=HabitProgressIcons \
+    --font-name=HabitProgressIcons \
+    --format
+
+run_icon_target \
+    ../assets/icons/common_icons \
+    ../assets/fonts/common_icons.otf \
+    --output-class-file=../lib/theme/_icons/common_icons.g.dart \
+    --class-name=CommonIcons \
+    --font-name=CommonIcons \
+    --format

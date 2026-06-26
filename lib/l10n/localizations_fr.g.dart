@@ -24,6 +24,39 @@ class L10nFr extends L10n {
   String get habitEdit_colorPicker_title => 'Choisir une couleur';
 
   @override
+  String get habitEdit_colorPicker_historySectionLabel => 'Recently used';
+
+  @override
+  String habitEdit_colorPicker_customSectionLabel(String tinted) {
+    String _temp0 = intl.Intl.selectLogic(tinted, {
+      'true': 'Custom (Tinted)',
+      'false': 'Custom',
+      'other': 'Custom',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get habitEdit_colorPicker_cancel => 'Cancel';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleLabel => 'Tint to theme';
+
+  @override
+  String get habitEdit_colorPicker_tintedLabel => 'Tinted';
+
+  @override
+  String get habitEdit_colorPicker_untintedLabel => 'Not tinted';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleOnHint =>
+      'Tinting may shift the final color away from the one you picked.';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleOffHint =>
+      'Some colors may reduce text readability in light or dark theme.';
+
+  @override
   String get habitEdit_habitTypeDialog_title => 'Type d’habitude';
 
   @override
@@ -240,7 +273,8 @@ class L10nFr extends L10n {
       'Un voyage de mille lieux commence par un pas';
 
   @override
-  String get habitDisplay_notFoundImage_text_01 => 'No matching habits found';
+  String get habitDisplay_notFoundImage_text_01 =>
+      'Aucune habitudes similaires trouvées';
 
   @override
   String habitDisplay_notFoundImage_text_02(String keyword) {
@@ -652,6 +686,12 @@ class L10nFr extends L10n {
   @override
   String get habitDetail_editHeatmapCal_backToToday_tooltipText =>
       'revenir à aujourd’hui';
+
+  @override
+  String get common_loadError_text => 'Failed to load';
+
+  @override
+  String get common_loadError_retryText => 'Essayez une nouvelle fois';
 
   @override
   String get habitDetail_notFoundText => 'Échec du chargement de l’habitude';
@@ -1531,6 +1571,9 @@ class L10nFr extends L10n {
 
   @override
   String get common_habitColorType_cc10 => 'Orchidée foncée';
+
+  @override
+  String get common_habitColorType_custom => 'Custom';
 
   @override
   String common_habitColorType_default(int index) {

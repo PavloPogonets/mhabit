@@ -27,7 +27,7 @@ jobs:
     outputs:
       pre-release: ${{ steps.pre-release.outputs.pre-release }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check if prerelease
         id: pre-release
         run: |
@@ -57,8 +57,8 @@ jobs:
       - build-linux-flatpak
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: sersoft-gmbh/setup-gh-cli-action@v2
+      - uses: actions/checkout@v6
+      - uses: sersoft-gmbh/setup-gh-cli-action@v3
         with:
           version: stable
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -91,7 +91,7 @@ jobs:
       - pre-build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup_jdk
       - uses: ./.github/actions/setup_flutter
       - id: build
@@ -117,16 +117,23 @@ jobs:
             ${{ steps.build.outputs.apk-x64-path }}
           token: ${{ secrets.APP_RELEASE_TOKEN }}
 
+  submit-android-play-store:
+    needs:
+      - pre-build
+    uses: ./.github/workflows/_submit-android-play-store.yml
+    with:
+      track: ${{ needs.pre-build.outputs.pre-release == 'true' && 'beta' || 'production' }}
+      dry_run: false
+    secrets: inherit
+
   build-ios:
     name: "Build Unsigned iOS IPA"
     needs:
       - pre-build
     runs-on: macos-latest
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ^26
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup_xcode
       - uses: ./.github/actions/setup_flutter
       - id: build
         uses: ./.github/actions/build_ios_unsigned
@@ -141,16 +148,32 @@ jobs:
             ${{ steps.build.outputs.ipa-path }}
           token: ${{ secrets.APP_RELEASE_TOKEN }}
 
+  submit-ios-app-store:
+    needs:
+      - pre-build
+    uses: ./.github/workflows/_submit-ios-app-store.yml
+    with:
+      track: ${{ needs.pre-build.outputs.pre-release == 'true' && 'beta' || 'public' }}
+      dry_run: false
+    secrets: inherit
+
+  submit-macos-app-store:
+    needs:
+      - pre-build
+    uses: ./.github/workflows/_submit-macos-app-store.yml
+    with:
+      track: ${{ needs.pre-build.outputs.pre-release == 'true' && 'beta' || 'public' }}
+      dry_run: false
+    secrets: inherit
+
   build-macos-dmg:
     name: "Build macOS DMG"
     needs:
       - pre-build
     runs-on: macos-latest
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ^26
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup_xcode
       - uses: ./.github/actions/setup_flutter
       - id: build
         uses: ./.github/actions/build_macos
@@ -190,7 +213,7 @@ jobs:
           #   runner: windows-11-arm
     runs-on: ${{ matrix.variant.runner }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/setup_flutter
       - id: build
         uses: ./.github/actions/build_windows
@@ -208,6 +231,18 @@ jobs:
           artifacts: >
             ${{ steps.build.outputs.msix-path }}
           token: ${{ secrets.APP_RELEASE_TOKEN }}
+
+  submit-windows-store:
+    needs:
+      - pre-build
+    # Microsoft Store has no public beta channel (package flights/private
+    # audience are invite-only), so there's nothing to submit pre-releases
+    # to — only submit real (non-pre-release) tags.
+    if: ${{ needs.pre-build.outputs.pre-release != 'true' }}
+    uses: ./.github/workflows/_submit-windows-store.yml
+    with:
+      dry_run: false
+    secrets: inherit
 
   build-linux-flatpak:
     name: "Build Linux Flatpak"
@@ -228,6 +263,8 @@ jobs:
       flatpak-arch: ${{ matrix.variant.flatpak-arch }}
       flatpak-name: mhabit-${{ matrix.variant.flatpak-arch }}.flatpak
       retention-days: 1
+    secrets:
+      artifact-token: ${{ secrets.APP_RELEASE_TOKEN }}
 
   publish-linux:
     needs:
@@ -244,7 +281,7 @@ jobs:
       FLATPAK_BUNDLE: mhabit-${{ matrix.variant.flatpak-arch }}.flatpak
     steps:
       - id: fetch
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ env.FLATPAK_BUNDLE }}
           github-token: ${{ secrets.APP_RELEASE_TOKEN }}

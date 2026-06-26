@@ -1,19 +1,16 @@
-# Release: v1.23.8+148
+# Release: v1.25.2+167-pre
 
-**✨ New Features**
+## 🌐 Localization
 
-- Enable drag on search filter and page scrolling (#504)
+- Update Hebrew translation, thanks to Omer I.S.'s contribution on Weblate (#589)
+- Update Turkish translation, thanks to Oğuz Ersen's contribution on Weblate (#589)
 
-**🌐 Localization**
+## 🧹 Others
 
-- Update translation files, refresh ARB format and clean empty metadata
-- Update German translation, thank to TheKos's contribution on Weblate (#503)
+- Add automated submission pipelines for Android Play Store, iOS App Store,
+  macOS App Store (fastlane match signing), and Microsoft Store (#590, #591,
+  #592, #593).
+- Add semi-automated release-flow scripts and orchestrator prompt for version
+  bump, changelog, and store-metadata generation (#588).
 
-**🧹 Others**
-
-- Bump darwin xcode version to 26 (#500)
-- Add metadata and changelog validation for iOS/macOS (#501)
-
-**📝 Documentation**
-
-- Update Donors.md
+[Full Changelog](https://github.com/FriesI23/mhabit/compare/v1.25.1+164...v1.25.2+167-pre)

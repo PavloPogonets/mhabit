@@ -1,5 +1,10 @@
 <!-- markdownlint-disable no-inline-html first-line-heading -->
 
+> Steps 1–6 below can be semi-automated with an AI tool's agent/command mode
+> using the `docs/prompts/mhabit-release-flow.md` prompt. Step 7 can also be
+> done through that prompt, but it always stops to ask for explicit
+> confirmation first. Steps 8–9 and Post-1 stay manual always.
+
 ## 1. Bump App Version
 
 > - [x] stable
@@ -13,9 +18,7 @@
 
    ```shell
    flutter clean
-   flutter pub get
-   scripts/normalize_arb.sh
-   scripts/build_runner.sh
+   make aio-full
    ```
 
 ## 2. Update Release Description
@@ -26,24 +29,33 @@
 Add Release change log in `docs/release.md`,
 Release-CI will use this file to automatically fill in [Release][github-release] description.
 
+You can start from `docs/release.template.md` and then update it for the target version.
+
 > Change SHOULD include: `<previous stable version>...<current version>`.
 
 ## 3. Update Changelog
 
 > - [x] stable
-> - [ ] beta
+> - [x] beta
 
 Add the release changelog in `CHANGELOG.md`, keeping its content consistent with `docs/release.md`.
 
 > Optionally, provide a translated changelog in `docs/CHANGELOG/<locale>.md`.
 
-## 4. F-Droid
+## 4. Android Platforms
 
 > - [x] stable
-> - [ ] beta
+> - [x] beta
 
-Metainfo required by F-Droid must be included in repo along with current tag,
-with Fastlane-compatible sturcture and format.
+Metadata required by F-Droid and Google Play must be included in repo along with
+current tag, with Fastlane-compatible structure and format.
+
+- **F-Droid**: `fastlane/metadata/android/<locale>/changelogs`
+  > - [x] stable
+  > - [ ] beta
+- **Google Play** (`f_store` flavor): `android/app/src/f_store/fastlane/metadata/android/<locale>/changelogs`
+  > - [x] stable
+  > - [x] beta
 
 Update info can be auto-generated from `CHANGELOG.md` by executing:
 
@@ -56,7 +68,18 @@ Or copy current version code change log from `CHANGELOG.md` to `{versionCode}.tx
 
 > Optionally, Add translation text at `fastlane/metadata/android/<locale>/changelogs`.
 
-## 5. Flatpak / Flathub
+## 5. Apple Platforms
+
+> - [x] stable
+> - [ ] beta
+
+For **stable** releases, generate Apple release notes:
+
+```shell
+scripts/gen_changelogs_darwin.sh
+```
+
+## 6. Flatpak / Flathub
 
 > - [x] stable
 > - [x] beta
@@ -91,7 +114,7 @@ flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream \
   io.github.friesi23.mhabit.metainfo.xml
 ```
 
-## 6. Commit and Add Release Tag
+## 7. Commit and Add Release Tag
 
 > - [x] stable
 > - [x] beta
@@ -118,19 +141,19 @@ For more info, see: [App Release][ghci-app-release].
 >   For details, see: [Update Flathub Manifest](#post-1-update-flathub-manifest)
 
 ```shell
-git commit -t .templates/git/commit-bumpversion.template
+git cbump
 # ...
 git tag <valid-version-tag>
 ```
 
-## 7. Waiting Release CI
+## 8. Waiting Release CI
 
 > - [x] stable
 > - [x] beta
 
 Checking Here: [App Release - Github Action][action-app-release]
 
-## 8. Publish on Github
+## 9. Publish on Github
 
 > - [x] stable
 > - [x] beta

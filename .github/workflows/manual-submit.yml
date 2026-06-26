@@ -1,0 +1,86 @@
+name: Manual Submit
+
+on:
+  workflow_dispatch:
+    inputs:
+      android:
+        description: "Submit Android (Play Store track, or skip)"
+        type: choice
+        options:
+          - skip
+          - internal
+          - alpha
+          - beta
+          - production
+        required: true
+        default: skip
+      ios:
+        description: >
+          Submit iOS (App Store track, or skip). "alpha"/"beta" land on
+          TestFlight (their only difference is which TestFlight group),
+          "public" is a real App Store submission.
+        type: choice
+        options:
+          - skip
+          - alpha
+          - beta
+          - public
+        required: true
+        default: skip
+      macos:
+        description: >
+          Submit macOS (App Store track, or skip). Same vocabulary as iOS.
+        type: choice
+        options:
+          - skip
+          - alpha
+          - beta
+          - public
+        required: true
+        default: skip
+      windows:
+        description: >
+          Submit Windows (Microsoft Store, or skip). No track concept.
+        type: choice
+        options:
+          - skip
+          - submit
+        required: true
+        default: skip
+      dry_run:
+        description: Run as a dry run (no real submission)
+        type: boolean
+        required: true
+        default: true
+
+jobs:
+  submit-android-play-store:
+    if: ${{ inputs.android != 'skip' }}
+    uses: ./.github/workflows/_submit-android-play-store.yml
+    with:
+      track: ${{ inputs.android }}
+      dry_run: ${{ inputs.dry_run }}
+    secrets: inherit
+
+  submit-ios-app-store:
+    if: ${{ inputs.ios != 'skip' }}
+    uses: ./.github/workflows/_submit-ios-app-store.yml
+    with:
+      track: ${{ inputs.ios }}
+      dry_run: ${{ inputs.dry_run }}
+    secrets: inherit
+
+  submit-macos-app-store:
+    if: ${{ inputs.macos != 'skip' }}
+    uses: ./.github/workflows/_submit-macos-app-store.yml
+    with:
+      track: ${{ inputs.macos }}
+      dry_run: ${{ inputs.dry_run }}
+    secrets: inherit
+
+  submit-windows-store:
+    if: ${{ inputs.windows != 'skip' }}
+    uses: ./.github/workflows/_submit-windows-store.yml
+    with:
+      dry_run: ${{ inputs.dry_run }}
+    secrets: inherit

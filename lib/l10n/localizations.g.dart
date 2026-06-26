@@ -10,6 +10,7 @@ import 'localizations_cs.g.dart';
 import 'localizations_de.g.dart';
 import 'localizations_en.g.dart';
 import 'localizations_es.g.dart';
+import 'localizations_eu.g.dart';
 import 'localizations_fa.g.dart';
 import 'localizations_fr.g.dart';
 import 'localizations_he.g.dart';
@@ -115,6 +116,7 @@ abstract class L10n {
     Locale('de'),
     Locale('en'),
     Locale('es'),
+    Locale('eu'),
     Locale('fa'),
     Locale('fr'),
     Locale('he'),
@@ -161,6 +163,54 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Pick color'**
   String get habitEdit_colorPicker_title;
+
+  /// No description provided for @habitEdit_colorPicker_historySectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently used'**
+  String get habitEdit_colorPicker_historySectionLabel;
+
+  /// No description provided for @habitEdit_colorPicker_customSectionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{tinted, select, true {Custom (Tinted)} false {Custom} other {Custom}}'**
+  String habitEdit_colorPicker_customSectionLabel(String tinted);
+
+  /// No description provided for @habitEdit_colorPicker_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get habitEdit_colorPicker_cancel;
+
+  /// No description provided for @habitEdit_colorPicker_tintToggleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tint to theme'**
+  String get habitEdit_colorPicker_tintToggleLabel;
+
+  /// No description provided for @habitEdit_colorPicker_tintedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tinted'**
+  String get habitEdit_colorPicker_tintedLabel;
+
+  /// No description provided for @habitEdit_colorPicker_untintedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tinted'**
+  String get habitEdit_colorPicker_untintedLabel;
+
+  /// No description provided for @habitEdit_colorPicker_tintToggleOnHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tinting may shift the final color away from the one you picked.'**
+  String get habitEdit_colorPicker_tintToggleOnHint;
+
+  /// No description provided for @habitEdit_colorPicker_tintToggleOffHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Some colors may reduce text readability in light or dark theme.'**
+  String get habitEdit_colorPicker_tintToggleOffHint;
 
   /// No description provided for @habitEdit_habitTypeDialog_title.
   ///
@@ -1151,6 +1201,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'back to today'**
   String get habitDetail_editHeatmapCal_backToToday_tooltipText;
+
+  /// No description provided for @common_loadError_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load'**
+  String get common_loadError_text;
+
+  /// No description provided for @common_loadError_retryText.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get common_loadError_retryText;
 
   /// No description provided for @habitDetail_notFoundText.
   ///
@@ -2430,6 +2492,12 @@ abstract class L10n {
   /// **'Dark orchid'**
   String get common_habitColorType_cc10;
 
+  /// No description provided for @common_habitColorType_custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get common_habitColorType_custom;
+
   /// unknown habit color type name
   ///
   /// In en, this message translates to:
@@ -2881,6 +2949,7 @@ class _L10nDelegate extends LocalizationsDelegate<L10n> {
     'de',
     'en',
     'es',
+    'eu',
     'fa',
     'fr',
     'he',
@@ -2926,6 +2995,8 @@ L10n lookupL10n(Locale locale) {
       return L10nEn();
     case 'es':
       return L10nEs();
+    case 'eu':
+      return L10nEu();
     case 'fa':
       return L10nFa();
     case 'fr':

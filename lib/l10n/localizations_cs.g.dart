@@ -24,6 +24,39 @@ class L10nCs extends L10n {
   String get habitEdit_colorPicker_title => 'Zvolte barvu';
 
   @override
+  String get habitEdit_colorPicker_historySectionLabel => 'Recently used';
+
+  @override
+  String habitEdit_colorPicker_customSectionLabel(String tinted) {
+    String _temp0 = intl.Intl.selectLogic(tinted, {
+      'true': 'Custom (Tinted)',
+      'false': 'Custom',
+      'other': 'Custom',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get habitEdit_colorPicker_cancel => 'Cancel';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleLabel => 'Tint to theme';
+
+  @override
+  String get habitEdit_colorPicker_tintedLabel => 'Tinted';
+
+  @override
+  String get habitEdit_colorPicker_untintedLabel => 'Not tinted';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleOnHint =>
+      'Tinting may shift the final color away from the one you picked.';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleOffHint =>
+      'Some colors may reduce text readability in light or dark theme.';
+
+  @override
   String get habitEdit_habitTypeDialog_title => 'Typ zvyku';
 
   @override
@@ -44,22 +77,22 @@ class L10nCs extends L10n {
 
   @override
   String habitEdit_habitDailyGoal_errorText01(num number) {
-    return 'daily goal must > $number';
+    return 'denní cíl musí být > $number';
   }
 
   @override
   String habitEdit_habitDailyGoal_errorText02(num number) {
-    return 'daily goal must ≤ $number';
+    return 'denní cíl musí být ≤ $number';
   }
 
   @override
   String habitEdit_habitDailyGoal_negativeErrorText01(num number) {
-    return 'daily goal must ≥ $number';
+    return 'denní cíl musí být ≥ $number';
   }
 
   @override
   String habitEdit_habitDailyGoal_negativeErrorText02(num number) {
-    return 'daily goal must ≤ $number';
+    return 'denní cíl musí být ≤ $number';
   }
 
   @override
@@ -71,7 +104,7 @@ class L10nCs extends L10n {
 
   @override
   String habitEdit_habitDailyGoalExtra_errorText(num dailyGoal) {
-    return 'invalid value, must be empty or ≥ $dailyGoal';
+    return 'neplatná hodna, musí být prázdné, nebo ≥ $dailyGoal';
   }
 
   @override
@@ -88,11 +121,11 @@ class L10nCs extends L10n {
   String get habitEdit_habitFreq_perweek_text => '%%time%% za týden';
 
   @override
-  String get habitEdit_habitFreq_permonth_text => '%%time%% times per month';
+  String get habitEdit_habitFreq_permonth_text => '%%time%% krát za měsíc';
 
   @override
   String get habitEdit_habitFreq_predayfreq_text =>
-      '%%time%% times in %%day%% days';
+      '%%time%% krát za %%day%% dnů';
 
   @override
   String get habitEdit_habitFreq_show_daily => 'Denní';
@@ -145,11 +178,11 @@ class L10nCs extends L10n {
   String get habitEdit_reminder_hintText => 'Připomenutí';
 
   @override
-  String get habitEdit_reminder_freq_weekHelpText => 'Any day of week';
+  String get habitEdit_reminder_freq_weekHelpText => 'Kterýkoli den v týdnu';
 
   @override
   String habitEdit_reminder_freq_week_text(String days) {
-    return '$days in every week';
+    return '$days každý týden';
   }
 
   @override
@@ -157,7 +190,7 @@ class L10nCs extends L10n {
 
   @override
   String habitEdit_reminder_freq_month_text(String days) {
-    return '$days in every month';
+    return '$days každý měsíc';
   }
 
   @override
@@ -175,10 +208,10 @@ class L10nCs extends L10n {
   String get habitEdit_reminder_dialogType_daily => 'Denní';
 
   @override
-  String get habitEdit_reminder_dialogType_week => 'Per week';
+  String get habitEdit_reminder_dialogType_week => 'Týdně';
 
   @override
-  String get habitEdit_reminder_dialogType_month => 'Per month';
+  String get habitEdit_reminder_dialogType_month => 'Měsíčně';
 
   @override
   String get habitEdit_reminder_dialogConfirm => 'Potvrdit';
@@ -197,51 +230,51 @@ class L10nCs extends L10n {
   String get habitEdit_reminder_cancelDialogConfirm => 'Potvrdit';
 
   @override
-  String get habitEdit_reminder_cancelDialogCancel => 'cancel';
+  String get habitEdit_reminder_cancelDialogCancel => 'Zrušit';
 
   @override
-  String get habitEdit_reminder_weekdayText_monday => 'Mon';
+  String get habitEdit_reminder_weekdayText_monday => 'Po';
 
   @override
-  String get habitEdit_reminder_weekdayText_tuesday => 'Tue';
+  String get habitEdit_reminder_weekdayText_tuesday => 'Út';
 
   @override
-  String get habitEdit_reminder_weekdayText_wednesday => 'Wed';
+  String get habitEdit_reminder_weekdayText_wednesday => 'St';
 
   @override
-  String get habitEdit_reminder_weekdayText_thursday => 'Tur';
+  String get habitEdit_reminder_weekdayText_thursday => 'Čt';
 
   @override
-  String get habitEdit_reminder_weekdayText_friday => 'Fri';
+  String get habitEdit_reminder_weekdayText_friday => 'Pá';
 
   @override
-  String get habitEdit_reminder_weekdayText_saturday => 'Sat';
+  String get habitEdit_reminder_weekdayText_saturday => 'So';
 
   @override
-  String get habitEdit_reminder_weekdayText_sunday => 'Sun';
+  String get habitEdit_reminder_weekdayText_sunday => 'Ne';
 
   @override
-  String get habitEdit_desc_hintText => 'Memo, support Markdown';
+  String get habitEdit_desc_hintText => 'Memo, podporuje Markdown';
 
   @override
-  String get habitEdit_create_datetime_prefix => 'Created: ';
+  String get habitEdit_create_datetime_prefix => 'Vytvořeno: ';
 
   @override
-  String get habitEdit_modify_datetime_prefix => 'Modified: ';
+  String get habitEdit_modify_datetime_prefix => 'Upraveno: ';
 
   @override
-  String get habitDisplay_fab_text => 'New Habit';
+  String get habitDisplay_fab_text => 'Nový zvyk';
 
   @override
   String get habitDisplay_emptyImage_text_01 =>
-      'A journey of a thousand miles begins with a single step';
+      'I ta nejdelší cesta začíná jediným krokem';
 
   @override
-  String get habitDisplay_notFoundImage_text_01 => 'No matching habits found';
+  String get habitDisplay_notFoundImage_text_01 => 'Žádné odpovídající návyky';
 
   @override
   String habitDisplay_notFoundImage_text_02(String keyword) {
-    return 'No matching habits for \"$keyword\"';
+    return 'Žádné odpovídající zvyky pro \"$keyword\"';
   }
 
   @override
@@ -256,7 +289,7 @@ class L10nCs extends L10n {
 
   @override
   String habitDisplay_archiveHabitsSuccSnackbarText(int count) {
-    return 'Archived $count habits';
+    return 'Archivováno $count zvyků';
   }
 
   @override
@@ -337,29 +370,30 @@ class L10nCs extends L10n {
   String get habitDisplay_statsMenu_statSubgroupText => 'Current';
 
   @override
-  String get habitDisplay_statsMenu_completedTileText => 'Completed';
+  String get habitDisplay_statsMenu_completedTileText => 'Dokončené';
 
   @override
-  String get habitDisplay_statsMenu_inProgresTileText => 'In Progress';
+  String get habitDisplay_statsMenu_inProgresTileText => 'Probíhající';
 
   @override
-  String get habitDisplay_statsMenu_archivedTileText => 'Archived';
+  String get habitDisplay_statsMenu_archivedTileText => 'Archivováno';
 
   @override
   String get habitDisplay_statsMenu_popularitySubgroupText =>
       'Top Habits: Last 30 Days Changes';
 
   @override
-  String get habitDisplay_mainMenu_lightTheme => 'Light Theme';
+  String get habitDisplay_mainMenu_lightTheme => 'Světlý vzhled';
 
   @override
-  String get habitDisplay_mainMenu_darkTheme => 'Dark Theme';
+  String get habitDisplay_mainMenu_darkTheme => 'Tmavý vzhled';
 
   @override
-  String get habitDisplay_mainMenu_followSystemTheme => 'Follow System';
+  String get habitDisplay_mainMenu_followSystemTheme => 'Podle systému';
 
   @override
-  String get habitDisplay_mainMenu_showArchivedTileText => 'Show Archived';
+  String get habitDisplay_mainMenu_showArchivedTileText =>
+      'Zobrazit archivované';
 
   @override
   String get habitDisplay_mainMenu_showCompletedTileText => 'Show Completed';
@@ -368,7 +402,7 @@ class L10nCs extends L10n {
   String get habitDisplay_mainMenu_showActivedTileText => 'Show Actived';
 
   @override
-  String get habitDisplay_mainMenu_settingTileText => 'Settings';
+  String get habitDisplay_mainMenu_settingTileText => 'Nastavení';
 
   @override
   String get habitDisplay_sort_reverseText => 'Reverse';
@@ -380,7 +414,7 @@ class L10nCs extends L10n {
   String get habitDisplay_sortDirection_Desc => '(Desc)';
 
   @override
-  String get habitDisplay_sortType_manual => 'My order';
+  String get habitDisplay_sortType_manual => 'Moje pořadí';
 
   @override
   String get habitDisplay_sortType_name => 'By Name';
@@ -410,7 +444,7 @@ class L10nCs extends L10n {
   String get habitDisplay_debug_debugSubgroup_title => '🛠️Debug';
 
   @override
-  String get habitDisplay_searchBar_hintText => 'Search habits';
+  String get habitDisplay_searchBar_hintText => 'Vyhledat zvyky';
 
   @override
   String get habitDisplay_searchFilter_ongoing => 'Ongoing';
@@ -420,7 +454,7 @@ class L10nCs extends L10n {
       'Shows habits that are currently active and ongoing (not archived or deleted).';
 
   @override
-  String get habitDisplay_searchFilter_completed => 'Completed';
+  String get habitDisplay_searchFilter_completed => 'Dokončené';
 
   @override
   String get habitDisplay_searchFilter_habitType_groupTitle => 'Typ zvyku';
@@ -642,6 +676,12 @@ class L10nCs extends L10n {
       'back to today';
 
   @override
+  String get common_loadError_text => 'Failed to load';
+
+  @override
+  String get common_loadError_retryText => 'Try again';
+
+  @override
   String get habitDetail_notFoundText => 'Load habit failed';
 
   @override
@@ -692,7 +732,7 @@ class L10nCs extends L10n {
   String get habitDetail_skipReason_saveText => 'save';
 
   @override
-  String get appSetting_appbar_titleText => 'Settings';
+  String get appSetting_appbar_titleText => 'Nastavení';
 
   @override
   String get appSetting_displaySubgroupText => 'Display';
@@ -748,7 +788,7 @@ class L10nCs extends L10n {
       'Use system accent or window/glass color';
 
   @override
-  String get appSetting_firstDayOfWeek_titleText => 'First day of week';
+  String get appSetting_firstDayOfWeek_titleText => 'První den v týdnu';
 
   @override
   String get appSetting_firstDayOfWeekDialog_titleText =>
@@ -767,10 +807,10 @@ class L10nCs extends L10n {
       'Follow System';
 
   @override
-  String get appSetting_changeLanguageTile_titleText => 'Language';
+  String get appSetting_changeLanguageTile_titleText => 'Jazyk';
 
   @override
-  String get appSetting_changeLanguageDialog_titleText => 'Select Language';
+  String get appSetting_changeLanguageDialog_titleText => 'Vyberte jazyk';
 
   @override
   String appSetting_dateDisplayFormat_titleText(String formatTemplate) {
@@ -811,7 +851,7 @@ class L10nCs extends L10n {
   String get appSetting_dailyReminder_titleText => 'Daily reminder';
 
   @override
-  String get appSetting_backupAndRestoreSubgroupText => 'Backup & restore';
+  String get appSetting_backupAndRestoreSubgroupText => 'Záloha a obnovení';
 
   @override
   String get appSetting_export_titleText => 'Export';
@@ -1510,6 +1550,9 @@ class L10nCs extends L10n {
 
   @override
   String get common_habitColorType_cc10 => 'Dark orchid';
+
+  @override
+  String get common_habitColorType_custom => 'Custom';
 
   @override
   String common_habitColorType_default(int index) {

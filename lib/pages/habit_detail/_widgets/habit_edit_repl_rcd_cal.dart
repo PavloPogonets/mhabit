@@ -22,23 +22,24 @@ import '../../../common/types.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../extensions/custom_color_extensions.dart';
 import '../../../models/app_event.dart';
+import '../../../models/habit_color.dart';
 import '../../../models/habit_daily_record_form.dart';
 import '../../../models/habit_date.dart';
 import '../../../models/habit_detail_chart.dart';
 import '../../../models/habit_form.dart';
 import '../../../models/habit_summary.dart';
-import '../../../providers/app_custom_date_format.dart';
-import '../../../providers/app_event.dart';
-import '../../../providers/app_sync.dart';
-import '../../../providers/habit_detail.dart';
+import '../../../providers/app_ui/app_custom_date_format.dart';
+import '../../../providers/workflow/app_event.dart';
+import '../../../providers/workflow/app_sync.dart';
 import '../../../theme/color.dart';
 import '../../../widgets/widgets.dart';
 import '../../common/widgets.dart';
+import '../_providers/habit_detail.dart';
 import 'habit_heatmap.dart';
 
 Future<void> showHabitEditReplacementRecordCalendarDialog({
   required BuildContext context,
-  HabitColorType? habitColorType,
+  HabitColor? habitColor,
   required int firstday,
   required HabitDetailViewModel detail,
 }) async {
@@ -47,7 +48,7 @@ Future<void> showHabitEditReplacementRecordCalendarDialog({
     builder: (context) => MultiProvider(
       providers: [ChangeNotifierProvider.value(value: detail)],
       child: HabitEditReplacementRecordCalendarDialog(
-        defaultColorType: habitColorType,
+        defaultColor: habitColor,
         firstday: firstday,
       ),
     ),
@@ -56,12 +57,12 @@ Future<void> showHabitEditReplacementRecordCalendarDialog({
 
 class HabitEditReplacementRecordCalendarDialog extends StatefulWidget {
   final double? cellSize;
-  final HabitColorType? defaultColorType;
+  final HabitColor? defaultColor;
   final int firstday;
   const HabitEditReplacementRecordCalendarDialog({
     super.key,
     this.cellSize,
-    this.defaultColorType,
+    this.defaultColor,
     required this.firstday,
   });
 
@@ -104,12 +105,11 @@ class _HabitEditReplacementRecordCalendarDialog
     if (!mounted) return;
     // try sync once
     if (shouldSyncOnce) {
-      final sync = context.maybeRead<AppSyncViewModel>();
-      if (sync != null && sync.mounted) sync.delayedStartTaskOnce();
+      context.maybeRead<AppSyncTriggerAccess>()?.delayedStartTaskOnce();
     }
     final habitUUID = _vm.habitUUID;
     if (habitUUID != null) {
-      context.read<AppEventViewModel>().push(
+      context.read<AppEventBus>().push(
         HabitRecordsChangedEvents(
           msg: "habit_detail.calendar._onRecordChangeConfirmed",
           uuidList: [habitUUID],
@@ -150,14 +150,14 @@ class _HabitEditReplacementRecordCalendarDialog
   void _openHabitRecordResonModifierDialog(HabitRecordDate date) async {
     if (!_vm.mounted) return;
     final initReason = await _vm.loadRecordReason(date) ?? '';
-    final colorType = _vm.habitColorType;
+    final habitColor = _vm.habitColor;
     if (!mounted) return;
     final result = await showHabitRecordReasonModifierDialog(
       context: context,
       initReason: initReason,
       recordDate: date,
       chipTextList: skipReasonChipTextList,
-      colorType: colorType,
+      color: habitColor,
     );
     if (result == null || result == initReason) return;
     if (!(mounted && _vm.mounted)) return;
@@ -191,7 +191,7 @@ class _HabitEditReplacementRecordCalendarDialog
       recordStatus: record?.status ?? HabitRecordStatus.unknown,
       recordDate: date,
       targetExtraValue: _vm.habitDailyGoalExtra,
-      colorType: _vm.habitColorType,
+      color: _vm.habitColor,
     );
 
     if (result == null || result == orgNum) return;
@@ -211,8 +211,11 @@ class _HabitEditReplacementRecordCalendarDialog
     final configvm = context.read<AppCustomDateYmdHmsConfigViewModel>();
 
     final valueColor =
-        (widget.defaultColorType != null
-            ? colorData?.getColor(widget.defaultColorType!)
+        (widget.defaultColor != null
+            ? colorData?.getColor(
+                widget.defaultColor!,
+                brightness: themeData.brightness,
+              )
             : null) ??
         themeData.colorScheme.primary;
 

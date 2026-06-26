@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 
 import '../../logging/helper.dart';
 import '../../models/habit_date.dart';
-import '../../providers/commons.dart';
+import '../../providers/support/commons.dart';
 import '../../utils/app_clock.dart';
 import '../../utils/local_timezone.dart';
 
@@ -119,13 +119,13 @@ class _DateChangeBuilder extends State<DateChangeBuilder> {
       final now = AppClock().now();
       // datetime
       final crtDate = HabitDate.dateTime(now);
-      if (changeNotifer.dateTime != crtDate) changeNotifer.dateTime = crtDate;
       // timezone
       final tzName = now.timeZoneName;
       if (changeNotifer.tzName != tzName) {
-        changeNotifer.tzName = tzName;
         await LocalTimeZoneManager().updateTimeZone();
       }
+      if (changeNotifer.dateTime != crtDate) changeNotifer.dateTime = crtDate;
+      if (changeNotifer.tzName != tzName) changeNotifer.tzName = tzName;
     });
     super.initState();
   }

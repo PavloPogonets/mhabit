@@ -24,8 +24,8 @@ import '../../../extensions/custom_color_extensions.dart';
 import '../../../l10n/localizations.dart';
 import '../../../models/app_theme_color.dart';
 import '../../../models/habit_form.dart';
-import '../../../providers/app_developer.dart';
-import '../../../providers/app_theme.dart';
+import '../../../providers/app_ui/app_developer.dart';
+import '../../../providers/app_ui/app_theme.dart';
 import '../../../theme/color.dart';
 
 Future<AppThemeColor?> showAppThemeColorChangerDialog({
@@ -257,7 +257,7 @@ class _InternalChosenOption extends StatelessWidget {
     final l10n = L10n.of(context);
     final color = Theme.of(
       context,
-    ).extension<CustomColors>()?.getColor(colorType);
+    ).extension<CustomColors>()?.getBuiltInColor(colorType);
     return ListTile(
       title: Text(HabitColorType.getColorName(colorType, l10n)),
       subtitle: debug ? Text("$color") : null,

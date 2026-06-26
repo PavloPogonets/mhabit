@@ -24,6 +24,39 @@ class L10nHe extends L10n {
   String get habitEdit_colorPicker_title => 'נא לבחור צבע';
 
   @override
+  String get habitEdit_colorPicker_historySectionLabel => 'Recently used';
+
+  @override
+  String habitEdit_colorPicker_customSectionLabel(String tinted) {
+    String _temp0 = intl.Intl.selectLogic(tinted, {
+      'true': 'Custom (Tinted)',
+      'false': 'Custom',
+      'other': 'Custom',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get habitEdit_colorPicker_cancel => 'Cancel';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleLabel => 'Tint to theme';
+
+  @override
+  String get habitEdit_colorPicker_tintedLabel => 'Tinted';
+
+  @override
+  String get habitEdit_colorPicker_untintedLabel => 'Not tinted';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleOnHint =>
+      'Tinting may shift the final color away from the one you picked.';
+
+  @override
+  String get habitEdit_colorPicker_tintToggleOffHint =>
+      'Some colors may reduce text readability in light or dark theme.';
+
+  @override
   String get habitEdit_habitTypeDialog_title => 'סוג הרגל';
 
   @override
@@ -39,27 +72,27 @@ class L10nHe extends L10n {
 
   @override
   String habitEdit_habitDailyGoal_negativeHintText(num number) {
-    return 'סף יומי מינימלי, ברירת מחדל $number';
+    return 'סף יומי מינימלי, ברירת המחדל היא $number';
   }
 
   @override
   String habitEdit_habitDailyGoal_errorText01(num number) {
-    return 'daily goal must > $number';
+    return 'על המטרה היומית להיות גדולה מ־$number';
   }
 
   @override
   String habitEdit_habitDailyGoal_errorText02(num number) {
-    return 'daily goal must ≤ $number';
+    return 'על המטרה היומית להיות קטנה או שווה ל־$number';
   }
 
   @override
   String habitEdit_habitDailyGoal_negativeErrorText01(num number) {
-    return 'daily goal must ≥ $number';
+    return 'על המטרה היומית להיות גדולה או שווה ל־$number';
   }
 
   @override
   String habitEdit_habitDailyGoal_negativeErrorText02(num number) {
-    return 'daily goal must ≤ $number';
+    return 'על המטרה היומית להיות קטנה או שווה ל־$number';
   }
 
   @override
@@ -67,22 +100,22 @@ class L10nHe extends L10n {
 
   @override
   String get habitEdit_habitDailyGoalExtra_hintText =>
-      'Desired maximum daily goal';
+      'כמות מרבית רצויה למטרה היומית';
 
   @override
   String habitEdit_habitDailyGoalExtra_errorText(num dailyGoal) {
-    return 'invalid value, must be empty or ≥ $dailyGoal';
+    return 'ערך לא תקני, חייב להיות ריק, שווה או גדול מ־$dailyGoal';
   }
 
   @override
   String get habitEdit_habitDailyGoalExtra_negativeHintText =>
-      'Maximum daily limit';
+      'כמות מרבית למטרה היומית';
 
   @override
   String get habitEdit_frequencySelector_title => 'נא לבחור תדירות';
 
   @override
-  String get habitEdit_habitFreq_daily => 'יומית';
+  String get habitEdit_habitFreq_daily => 'מטרה יומית';
 
   @override
   String get habitEdit_habitFreq_perweek_text => '%%time%% פעמים בשבוע';
@@ -92,18 +125,18 @@ class L10nHe extends L10n {
 
   @override
   String get habitEdit_habitFreq_predayfreq_text =>
-      '%%time%% פעמים ב %%day%% ימים';
+      '%%time%% פעמים ב־%%day%% ימים';
 
   @override
-  String get habitEdit_habitFreq_show_daily => 'יומית';
+  String get habitEdit_habitFreq_show_daily => 'מטרה יומית';
 
   @override
   String habitEdit_habitFreq_show_perweek(int freq) {
     String _temp0 = intl.Intl.pluralLogic(
       freq,
       locale: localeName,
-      other: 'At least $freq times per week',
-      one: 'Per week',
+      other: 'לפחות $freq פעמים בשבוע',
+      one: 'פעם בשבוע',
     );
     return '$_temp0';
   }
@@ -113,8 +146,8 @@ class L10nHe extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       freq,
       locale: localeName,
-      other: 'At least $freq times per month',
-      one: 'Per month',
+      other: 'לפחות $freq פעמים בחודש',
+      one: 'פעם בחודש',
     );
     return '$_temp0';
   }
@@ -124,8 +157,8 @@ class L10nHe extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       freq,
       locale: localeName,
-      other: 'At least $freq times in every $days days',
-      one: 'In every $days days',
+      other: 'לפחות $freq פעמים בכל $days ימים',
+      one: 'פעם בכל $days ימים',
     );
     return '$_temp0';
   }
@@ -136,7 +169,7 @@ class L10nHe extends L10n {
   }
 
   @override
-  String get habitEdit_targetDays_dialogTitle => 'Select Target Days';
+  String get habitEdit_targetDays_dialogTitle => 'בחירת ימים למטרה';
 
   @override
   String get habitEdit_targetDays => 'ימים';
@@ -164,14 +197,13 @@ class L10nHe extends L10n {
   String get habitEdit_reminderQuest_hintText => 'שאלה, למשל: עשית היום כושר?';
 
   @override
-  String get habitEdit_reminder_dialogTitle => 'Choose reminder type';
+  String get habitEdit_reminder_dialogTitle => 'בחירת סוג תזכורת';
 
   @override
-  String get habitEdit_reminder_dialogType_whenNeeded =>
-      'When need to check in';
+  String get habitEdit_reminder_dialogType_whenNeeded => 'מתי יש לסמן';
 
   @override
-  String get habitEdit_reminder_dialogType_daily => 'יומית';
+  String get habitEdit_reminder_dialogType_daily => 'מטרה יומית';
 
   @override
   String get habitEdit_reminder_dialogType_week => 'לפי שבוע';
@@ -180,10 +212,10 @@ class L10nHe extends L10n {
   String get habitEdit_reminder_dialogType_month => 'לפי חודש';
 
   @override
-  String get habitEdit_reminder_dialogConfirm => 'confirm';
+  String get habitEdit_reminder_dialogConfirm => 'אישור';
 
   @override
-  String get habitEdit_reminder_dialogCancel => 'cancel';
+  String get habitEdit_reminder_dialogCancel => 'ביטול';
 
   @override
   String get habitEdit_reminder_cancelDialogTitle => 'אישור';
@@ -192,10 +224,10 @@ class L10nHe extends L10n {
   String get habitEdit_reminder_cancelDialogSubtitle => 'להסיר תזכורת זו?';
 
   @override
-  String get habitEdit_reminder_cancelDialogConfirm => 'confirm';
+  String get habitEdit_reminder_cancelDialogConfirm => 'אישור';
 
   @override
-  String get habitEdit_reminder_cancelDialogCancel => 'cancel';
+  String get habitEdit_reminder_cancelDialogCancel => 'ביטול';
 
   @override
   String get habitEdit_reminder_weekdayText_monday => 'שני';
@@ -219,7 +251,7 @@ class L10nHe extends L10n {
   String get habitEdit_reminder_weekdayText_sunday => 'ראשון';
 
   @override
-  String get habitEdit_desc_hintText => 'Memo, support Markdown';
+  String get habitEdit_desc_hintText => 'הערה, יש תמיכה ב־Markdown';
 
   @override
   String get habitEdit_create_datetime_prefix => 'נוצר בתאריך: ';
@@ -231,14 +263,14 @@ class L10nHe extends L10n {
   String get habitDisplay_fab_text => 'יצירת הרגל';
 
   @override
-  String get habitDisplay_emptyImage_text_01 => 'גם רומא לא נבנתה ביום אחד';
+  String get habitDisplay_emptyImage_text_01 => 'מסע של אלף מיל מתחיל בצעד אחד';
 
   @override
-  String get habitDisplay_notFoundImage_text_01 => 'No matching habits found';
+  String get habitDisplay_notFoundImage_text_01 => 'לא נמצאו הרגלים תואמים';
 
   @override
   String habitDisplay_notFoundImage_text_02(String keyword) {
-    return 'No matching habits for \"$keyword\"';
+    return 'לא נמצאו הרגלים שתואמים לחיפוש „$keyword”';
   }
 
   @override
@@ -246,29 +278,29 @@ class L10nHe extends L10n {
       'להעביר את הארכיונים שנבחרו לארכיון?';
 
   @override
-  String get habitDisplay_archiveHabitsConfirmDialog_confirm => 'confirm';
+  String get habitDisplay_archiveHabitsConfirmDialog_confirm => 'אישור';
 
   @override
-  String get habitDisplay_archiveHabitsConfirmDialog_cancel => 'cancel';
+  String get habitDisplay_archiveHabitsConfirmDialog_cancel => 'ביטול';
 
   @override
   String habitDisplay_archiveHabitsSuccSnackbarText(int count) {
-    return 'Archived $count habits';
+    return '‏$count הרגלים הועברו לארכיון';
   }
 
   @override
   String get habitDisplay_unarchiveHabitsConfirmDialog_title =>
-      'Unarchive Selected Habits?';
+      'להוציא את ההרגלים שנבחרו מהארכיון?';
 
   @override
-  String get habitDisplay_unarchiveHabitsConfirmDialog_confirm => 'confirm';
+  String get habitDisplay_unarchiveHabitsConfirmDialog_confirm => 'אישור';
 
   @override
-  String get habitDisplay_unarchiveHabitsConfirmDialog_cancel => 'cancel';
+  String get habitDisplay_unarchiveHabitsConfirmDialog_cancel => 'ביטול';
 
   @override
   String habitDisplay_unarchiveHabitsSuccSnackbarText(int count) {
-    return 'Unarchived $count habits';
+    return '‏$count הרגלים הוצאו מהארכיון';
   }
 
   @override
@@ -276,19 +308,19 @@ class L10nHe extends L10n {
       'למחוק את ההרגלים שנבחרו?';
 
   @override
-  String get habitDisplay_deleteHabitsConfirmDialog_confirm => 'confirm';
+  String get habitDisplay_deleteHabitsConfirmDialog_confirm => 'אישור';
 
   @override
-  String get habitDisplay_deleteHabitsConfirmDialog_cancel => 'cancel';
+  String get habitDisplay_deleteHabitsConfirmDialog_cancel => 'ביטול';
 
   @override
   String habitDisplay_deleteHabitsSuccSnackbarText(int count) {
-    return 'Deleted $count habits';
+    return 'נמחקו $count הרגלים';
   }
 
   @override
   String habitDisplay_deleteSingleHabitSuccSnackbarText(String name) {
-    return 'Deleted habit: \"$name\"';
+    return 'נמחק ההרגל: „$name”';
   }
 
   @override
@@ -296,15 +328,14 @@ class L10nHe extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Exported $count habits.',
-      one: 'Exported habit.',
+      other: 'יוצאו $count הרגלים.',
+      one: 'ההרגל יוּצא.',
     );
     return '$_temp0';
   }
 
   @override
-  String get habitDisplay_exportAllHabitsSuccSnackbarText =>
-      'Exported All Habits';
+  String get habitDisplay_exportAllHabitsSuccSnackbarText => 'כל ההרגלים יוצאו';
 
   @override
   String get habitDisplay_editPopMenu_selectAll => 'לבחור הכול';
@@ -331,7 +362,7 @@ class L10nHe extends L10n {
   String get habitDisplay_settingButton_tooltip => 'הגדרות';
 
   @override
-  String get habitDisplay_statsMenu_statSubgroupText => 'Current';
+  String get habitDisplay_statsMenu_statSubgroupText => 'כרגע';
 
   @override
   String get habitDisplay_statsMenu_completedTileText => 'הושלם';
@@ -344,7 +375,7 @@ class L10nHe extends L10n {
 
   @override
   String get habitDisplay_statsMenu_popularitySubgroupText =>
-      'Top Habits: Last 30 Days Changes';
+      'ההרגלים המובילים: שינויים ב־30 הימים האחרונים';
 
   @override
   String get habitDisplay_mainMenu_lightTheme => 'סגנון בהיר';
@@ -364,13 +395,13 @@ class L10nHe extends L10n {
       'הצגת הרגלים שהושלמו';
 
   @override
-  String get habitDisplay_mainMenu_showActivedTileText => 'Show Actived';
+  String get habitDisplay_mainMenu_showActivedTileText => 'הצגת פעילים';
 
   @override
   String get habitDisplay_mainMenu_settingTileText => 'הגדרות';
 
   @override
-  String get habitDisplay_sort_reverseText => 'Reverse';
+  String get habitDisplay_sort_reverseText => 'היפוך';
 
   @override
   String get habitDisplay_sortDirection_asc => '(עולה)';
@@ -388,7 +419,7 @@ class L10nHe extends L10n {
   String get habitDisplay_sortType_colorType => 'לפי צבע';
 
   @override
-  String get habitDisplay_sortType_progress => 'By Rate';
+  String get habitDisplay_sortType_progress => 'לפי דירוג';
 
   @override
   String get habitDisplay_sortType_startT => 'לפי תאריך התחלה';
@@ -400,23 +431,23 @@ class L10nHe extends L10n {
   String get habitDisplay_sortTypeDialog_title => 'מיון';
 
   @override
-  String get habitDisplay_sortTypeDialog_confirm => 'confirm';
+  String get habitDisplay_sortTypeDialog_confirm => 'אישור';
 
   @override
-  String get habitDisplay_sortTypeDialog_cancel => 'cancel';
+  String get habitDisplay_sortTypeDialog_cancel => 'ביטול';
 
   @override
-  String get habitDisplay_debug_debugSubgroup_title => '🛠️Debug';
+  String get habitDisplay_debug_debugSubgroup_title => '🛠️ ניפוי שגיאות';
 
   @override
-  String get habitDisplay_searchBar_hintText => 'Search habits';
+  String get habitDisplay_searchBar_hintText => 'חיפוש הרגלים';
 
   @override
-  String get habitDisplay_searchFilter_ongoing => 'Ongoing';
+  String get habitDisplay_searchFilter_ongoing => 'בתהליך';
 
   @override
   String get habitDisplay_searchFilter_ongoing_desc =>
-      'Shows habits that are currently active and ongoing (not archived or deleted).';
+      'הצגת הרגלים שכרגע הם פעילים ובתהליך (ולא כאלה שבארכיון או שנמחקו).';
 
   @override
   String get habitDisplay_searchFilter_completed => 'הושלם';
@@ -425,36 +456,36 @@ class L10nHe extends L10n {
   String get habitDisplay_searchFilter_habitType_groupTitle => 'סוג הרגל';
 
   @override
-  String get habitDisplay_searchFilter_tooltips => 'Show Filters';
+  String get habitDisplay_searchFilter_tooltips => 'הצגת מסננים';
 
   @override
-  String get habitDisplay_searchFilter_clearFilter => 'Clear Filters';
+  String get habitDisplay_searchFilter_clearFilter => 'ניקוי מסננים';
 
   @override
-  String get habitDisplay_tab_habits_label => 'Habits';
+  String get habitDisplay_tab_habits_label => 'הרגלים';
 
   @override
-  String get habitDisplay_tab_today_label => 'Today';
+  String get habitDisplay_tab_today_label => 'היום';
 
   @override
-  String get habitToday_appBar_title => 'Today';
+  String get habitToday_appBar_title => 'היום';
 
   @override
-  String get habitToday_image_desc => 'YOU MADE IT';
+  String get habitToday_image_desc => 'עשית את זה';
 
   @override
   String habitToday_card_subtitle_text(int days) {
-    return 'Kept it up for $days days';
+    return 'הצלחת למשך $days ימים';
   }
 
   @override
-  String get habitToday_card_donePlusButton_label => 'Done+';
+  String get habitToday_card_donePlusButton_label => 'הושלם+';
 
   @override
-  String get habitToday_card_skipPlusButton_label => 'Skip+';
+  String get habitToday_card_skipPlusButton_label => 'דילוג+';
 
   @override
-  String get habitDetail_editButton_tooltip => 'Edit';
+  String get habitDetail_editButton_tooltip => 'עריכה';
 
   @override
   String get habitDetail_editPopMenu_unarchive => 'הוצאה מהארכיון';
@@ -472,10 +503,10 @@ class L10nHe extends L10n {
   String get habitDetail_editPopMenu_clone => 'תבנית';
 
   @override
-  String get habitDetail_confirmDialog_confirm => 'confirm';
+  String get habitDetail_confirmDialog_confirm => 'אישור';
 
   @override
-  String get habitDetail_confirmDialog_cancel => 'cancel';
+  String get habitDetail_confirmDialog_cancel => 'ביטול';
 
   @override
   String get habitDetail_archiveConfirmDialog_titleText =>
@@ -493,7 +524,7 @@ class L10nHe extends L10n {
 
   @override
   String habitDetail_summary_body(String score, int days) {
-    return 'Current grade is $score, and it has been $days days since the start.';
+    return 'הציון הנוכחי הוא $score, ועברו $days ימים מאז ההתחלה.';
   }
 
   @override
@@ -501,8 +532,8 @@ class L10nHe extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       days,
       locale: localeName,
-      other: 'Start in $days days.',
-      one: 'Starting tomorrow.',
+      other: 'יתחיל בעוד $days ימים.',
+      one: 'מתחיל מחר.',
     );
     return '$_temp0';
   }
@@ -513,8 +544,8 @@ class L10nHe extends L10n {
       habitType,
       locale: localeName,
       other: '',
-      two: 'SUBSTANDARD',
-      one: 'INCOMPLETE',
+      two: 'פחות מהרגיל',
+      one: 'לא הושלם',
     );
     return '$_temp0';
   }
@@ -525,8 +556,8 @@ class L10nHe extends L10n {
       habitType,
       locale: localeName,
       other: '',
-      two: 'IMPECCABLE',
-      one: 'OVERFULFIL',
+      two: 'יוצא מן הכלל',
+      one: 'יותר מהנדרש',
     );
     return '$_temp0';
   }
@@ -536,8 +567,8 @@ class L10nHe extends L10n {
     String _temp0 = intl.Intl.pluralLogic(
       habitType,
       locale: localeName,
-      other: 'Goal',
-      two: 'Threshold',
+      other: 'מטרה',
+      two: 'סף',
     );
     return '$_temp0';
   }
@@ -548,20 +579,20 @@ class L10nHe extends L10n {
   }
 
   @override
-  String get habitDetail_descDailyGoal_unitEmptyText => 'null';
+  String get habitDetail_descDailyGoal_unitEmptyText => 'אין נתונים';
 
   @override
   String habitDetail_descTargetDays_titleText(int habitType) {
     String _temp0 = intl.Intl.pluralLogic(
       habitType,
       locale: localeName,
-      other: 'Days',
+      other: 'ימים',
     );
     return '$_temp0';
   }
 
   @override
-  String get habitDetail_descTargetDays_unitText => 'd';
+  String get habitDetail_descTargetDays_unitText => 'ימים';
 
   @override
   String get habitDetail_descRecordsNum_titleText => 'רשומות';
@@ -603,16 +634,18 @@ class L10nHe extends L10n {
   String get habitDetail_freqChartNaviBar_nowText => 'כעת';
 
   @override
-  String get habitDetail_freqChart_expanded_hideTooltip => 'Hide History Chart';
+  String get habitDetail_freqChart_expanded_hideTooltip =>
+      'הסתרת תרשים ההיסטוריה';
 
   @override
-  String get habitDetail_freqChart_expanded_showTooltip => 'Show History Chart';
+  String get habitDetail_freqChart_expanded_showTooltip =>
+      'הצגת תרשים ההיסטוריה';
 
   @override
   String get habitDetail_descSubgroup_title => 'הערה';
 
   @override
-  String get habitDetail_otherSubgroup_title => 'Other';
+  String get habitDetail_otherSubgroup_title => 'שונות';
 
   @override
   String get habitDetail_habitType_title => 'סוג';
@@ -633,13 +666,19 @@ class L10nHe extends L10n {
   String get habitDetail_modifyDateTile_title => 'תאריך שינוי';
 
   @override
-  String get habitDetail_editHeatmapCal_dateButtonText => 'date';
+  String get habitDetail_editHeatmapCal_dateButtonText => 'תאריך';
 
   @override
-  String get habitDetail_editHeatmapCal_valueButtonText => 'value';
+  String get habitDetail_editHeatmapCal_valueButtonText => 'ערך';
 
   @override
   String get habitDetail_editHeatmapCal_backToToday_tooltipText => 'חזרה להיום';
+
+  @override
+  String get common_loadError_text => 'הטעינה נכשלה';
+
+  @override
+  String get common_loadError_retryText => 'ניסיון חוזר';
 
   @override
   String get habitDetail_notFoundText => 'טעינת ההרגל נכשלה';
@@ -652,32 +691,32 @@ class L10nHe extends L10n {
 
   @override
   String habitDetail_changeGoal_currentChipText(String goal) {
-    return 'current: $goal';
+    return 'כרגע: $goal';
   }
 
   @override
   String habitDetail_changeGoal_doneChipText(String goal) {
-    return 'done: $goal';
+    return 'הושלם: $goal';
   }
 
   @override
-  String get habitDetail_changeGoal_undoneChipText => 'undone';
+  String get habitDetail_changeGoal_undoneChipText => 'לא הושלם';
 
   @override
   String habitDetail_changeGoal_extraChipText(String goal) {
-    return '$goal';
+    return '‏$goal';
   }
 
   @override
   String habitDetail_changeGoal_helpText(String goal) {
-    return 'Daily goal, default: $goal';
+    return 'מטרה יומית, ברירת מחדל: $goal';
   }
 
   @override
-  String get habitDetail_changeGoal_cancelText => 'cancel';
+  String get habitDetail_changeGoal_cancelText => 'ביטול';
 
   @override
-  String get habitDetail_changeGoal_saveText => 'save';
+  String get habitDetail_changeGoal_saveText => 'שמירה';
 
   @override
   String get habitDetail_skipReason_title => 'סיבה לדילוג';
@@ -686,10 +725,10 @@ class L10nHe extends L10n {
   String get habitDetail_skipReason_bodyHelpText => 'אפשר לכתוב כאן...';
 
   @override
-  String get habitDetail_skipReason_cancelText => 'cancel';
+  String get habitDetail_skipReason_cancelText => 'ביטול';
 
   @override
-  String get habitDetail_skipReason_saveText => 'save';
+  String get habitDetail_skipReason_saveText => 'שמירה';
 
   @override
   String get appSetting_appbar_titleText => 'הגדרות';
@@ -702,50 +741,48 @@ class L10nHe extends L10n {
 
   @override
   String get appSetting_dragCalendarByPageTile_titleText =>
-      'Drag calendar by page';
+      'גרירת לוח השנה לפי עמוד';
 
   @override
   String get appSetting_dragCalendarByPageTile_subtitleText =>
-      'If the switch is enabled, the app bar calendar on the home page will be dragged page by page. By default, the switch is disabled.';
+      'אם האפשרות מופעלת, לוח השנה שבשורת הכותרת של עמוד הבית של היישום תוכל להיגרר מעמוד לעמוד. האפשרות מושבתת כברירת מחדל.';
 
   @override
-  String get appSetting_changeRecordStatusOpTile_titleText =>
-      'Change Record Status';
+  String get appSetting_changeRecordStatusOpTile_titleText => 'שינוי מצב רשומה';
 
   @override
   String get appSetting_changeRecordStatusOpTile_subtitleText =>
-      'Modify the click behavior to change the status of daily records on main page.';
+      'שינוי אופן הלחיצה לשינוי המצב של הרשומות היומיות בעמוד הראשי.';
 
   @override
   String get appSetting_openRecordStatusDialogOpTile_titleText =>
-      'Open Detailed Record';
+      'פתיחת רשומה מפורטת';
 
   @override
   String get appSetting_openRecordStatusDialogOpTile_subtitleText =>
-      'Modify the click behavior to open the detailed popup for daily records on main page.';
+      'שינוי אופן הפתיחה של חלוניות נפתחות עם פירוט על הרשומות היומיות בעמוד הראשי.';
 
   @override
-  String get appSetting_appThemeColorTile_titleText => 'Theme Color';
+  String get appSetting_appThemeColorTile_titleText => 'צבע נושא';
 
   @override
-  String get appSetting_appThemeColorChosenDiloag_titleText =>
-      'Choose Theme Color';
+  String get appSetting_appThemeColorChosenDiloag_titleText => 'בחירת צבע נושא';
 
   @override
   String get appSetting_appThemeColorChosenDialog_subTitleText_android =>
-      'Use wallpaper\'s main color (Android 12+)';
+      'שימוש בצבע הראשי של הרקע (אנדרואיד 12‏+)';
 
   @override
   String get appSetting_appThemeColorChosenDialog_subTitleText_linux =>
-      'Use GTK+ theme\'s selected background color';
+      'שימוש בצבע הנבחר של ערכת הנושא ל־GTK‏+';
 
   @override
   String get appSetting_appThemeColorChosenDialog_subTitleText_macos =>
-      'Use system theme color';
+      'שימוש בצבע הנושא של המערכת';
 
   @override
   String get appSetting_appThemeColorChosenDialog_subTitleText_windows =>
-      'Use system accent or window/glass color';
+      'שימוש בצבע הנושא או בצבע החלון/זכוכית';
 
   @override
   String get appSetting_firstDayOfWeek_titleText => 'היום הראשון בשבוע';
@@ -774,32 +811,32 @@ class L10nHe extends L10n {
 
   @override
   String appSetting_dateDisplayFormat_titleText(String formatTemplate) {
-    return 'Date display format ($formatTemplate)';
+    return 'תבנית להצגת תאריכים ($formatTemplate)';
   }
 
   @override
   String get appSetting_dateDisplayFormat_titleTemplate_followSystemText =>
-      'follow system setting';
+      'לפי הגדרות המערכת';
 
   @override
   String get appSetting_dateDisplayFormat_subTitleText =>
-      'Configured date format will be applied to the date display on habit detail page.';
+      'תבנית התאריך שהוגדרה תחול על תצוגת התאריך בעמוד פרטי ההרגל.';
 
   @override
   String get appSetting_compactUISwitcher_titleText =>
-      'Enable Compact UI on habits page';
+      'הפעלת ממשק משתמש חסכוני בעמוד ההרגלים';
 
   @override
   String get appSetting_compactUISwitcher_subtitleText =>
-      'Allow habits check table to display more content, but some UI and text may appear smaller.';
+      'מאפשרת לרשימת ההרגלים לסימון להציג יותר תוכן, כאשר ממשק המשתמש והטקסט עשויים להופיע בקטן יותר.';
 
   @override
   String get appSetting_collapsed_calendar_bararea_titleText =>
-      'Habits check area radio adjustment';
+      'כוונון גודל השטח לסימון הרגלים';
 
   @override
   String get appSetting_collapsed_calendar_bararea_subtitleText =>
-      'Adjust percentage for more/less space in habits check table area.';
+      'יש לכוונן את מספר האחוזים בשביל להקצות יותר או פחות מקום לסימון ההרגלים ברשימה.';
 
   @override
   String get appSetting_collapsed_calendar_bararea_defaultText => 'ברירת מחדל';
@@ -818,74 +855,74 @@ class L10nHe extends L10n {
 
   @override
   String get appSetting_export_subtitleText =>
-      'Exported habits as JSON format, This file can be import back.';
+      'ההרגלים מיוצאים בתבנית הקובץ JSON, ניתן לייבא קובץ זה בחזרה.';
 
   @override
   String get appSetting_import_titleText => 'ייבוא';
 
   @override
-  String get appSetting_import_subtitleText => 'Import habits from json file.';
+  String get appSetting_import_subtitleText => 'ייבוא הרגלים מקובץ json.';
 
   @override
   String appSetting_importDialog_confirmTitle(int count) {
-    return 'Confirm import $count habits?';
+    return 'לאשר את הייבוא של $count הרגלים?';
   }
 
   @override
   String get appSetting_importDialog_confirmSubtitle =>
-      'Note: Import doesn\'t delete existing habits.';
+      'הערה: הייבוא אינו מוחק הרגלים קיימים.';
 
   @override
-  String get appSetting_importDialog_confirm_confirmText => 'confirm';
+  String get appSetting_importDialog_confirm_confirmText => 'אישור';
 
   @override
-  String get appSetting_importDialog_confirm_cancelText => 'cancel';
+  String get appSetting_importDialog_confirm_cancelText => 'ביטול';
 
   @override
   String appSetting_importDialog_importingTitle(
     int completeCount,
     int totalCount,
   ) {
-    return 'Imported $completeCount/$totalCount';
+    return 'יובאו $completeCount‏/$totalCount';
   }
 
   @override
   String appSetting_importDialog_completeTitle(int count) {
-    return 'Complete import $count';
+    return 'השלמת הייבוא של $count';
   }
 
   @override
-  String get appSetting_importDialog_complete_closeLabel => 'close';
+  String get appSetting_importDialog_complete_closeLabel => 'סגירה';
 
   @override
-  String get appSetting_resetConfig_titleText => 'Reset configs';
+  String get appSetting_resetConfig_titleText => 'איפוס ההגדרות';
 
   @override
   String get appSetting_resetConfig_subtitleText =>
-      'Reset all configs to default.';
+      'איפוס כל ההגדרות לברירת המחדל';
 
   @override
-  String get appSetting_resetConfigDialog_titleText => 'Reset configs?';
+  String get appSetting_resetConfigDialog_titleText => 'לאפס את ההגדרות?';
 
   @override
   String get appSetting_resetConfigDialog_subtitleText =>
-      'Reset all configs to default, must restart application to apply.';
+      'איפוס כל ההגדרות לברירת המחדל, על היישום להיפתח מחדש להחלת השינויים.';
 
   @override
-  String get appSetting_resetConfigDialog_cancelText => 'cancel';
+  String get appSetting_resetConfigDialog_cancelText => 'ביטול';
 
   @override
-  String get appSetting_resetConfigDialog_confirmText => 'confirm';
+  String get appSetting_resetConfigDialog_confirmText => 'אישור';
 
   @override
   String get appSetting_resetConfigSuccess_snackbarText =>
-      'reset app configs succeed';
+      'הגדרות היישום אופסו בהצלחה';
 
   @override
-  String get appSetting_otherSubgroupText => 'Others';
+  String get appSetting_otherSubgroupText => 'שונות';
 
   @override
-  String get appSetting_developMode_titleText => 'Develop Mode';
+  String get appSetting_developMode_titleText => 'מצב מפתחים';
 
   @override
   String get appSetting_clearCache_titleText => 'ניקוי המטמון';
@@ -895,51 +932,48 @@ class L10nHe extends L10n {
 
   @override
   String get appSetting_clearCacheDialog_subtitleText =>
-      'After clearing cache, some custom values will be restored to defaults.';
+      'לאחר ניקוי המטמון, חלק מהערכים המותאמים אישית ישוחזרו לברירות המחדל.';
 
   @override
-  String get appSetting_clearCacheDialog_cancelText => 'cancel';
+  String get appSetting_clearCacheDialog_cancelText => 'ביטול';
 
   @override
-  String get appSetting_clearCacheDialog_confirmText => 'confirm';
+  String get appSetting_clearCacheDialog_confirmText => 'אישור';
 
   @override
   String get appSetting_clearCache_snackBar_partSuccText =>
-      'Partial Cache cleared failed';
+      'ניקוי מטמון חלקי נכשל';
 
   @override
-  String get appSetting_clearCache_snackBar_succText =>
-      'Cache cleared successfully';
+  String get appSetting_clearCache_snackBar_succText => 'המטמון נוקה בהצלחה';
 
   @override
-  String get appSetting_clearCache_snackBar_failText => 'Cache cleared failed';
+  String get appSetting_clearCache_snackBar_failText => 'ניקוי המטמון נכשל';
 
   @override
-  String get appSetting_debugger_titleText => 'Debug Info';
+  String get appSetting_debugger_titleText => 'מידע ניפוי שגיאות';
 
   @override
-  String get appSetting_about_titleText => 'About';
+  String get appSetting_about_titleText => 'על אודות';
 
   @override
-  String get appSetting_experimentalFeatureTile_titleText =>
-      'Experimental Features';
+  String get appSetting_experimentalFeatureTile_titleText => 'תכונות ניסיוניות';
 
   @override
-  String get appSetting_synSubgroupText => 'Sync';
+  String get appSetting_synSubgroupText => 'סנכרון';
 
   @override
-  String get appSetting_syncOption_titleText => 'Sync Options';
+  String get appSetting_syncOption_titleText => 'אפשרויות סנכרון';
 
   @override
-  String get appSetting_notify_titleTile => 'Notifications';
+  String get appSetting_notify_titleTile => 'התראות';
 
   @override
-  String get appSetting_notify_subtitleTile =>
-      'Manage notification preferences';
+  String get appSetting_notify_subtitleTile => 'ניהול העדפות ההתראות';
 
   @override
   String get appSetting_notify_subtitleTile_android =>
-      'Tap to open system notification settings';
+      'הקשה כאן תפתח את הגדרות ההתראות של המערכת';
 
   @override
   String get appSync_nowTile_titleText => 'סנכרון כעת';
@@ -954,7 +988,7 @@ class L10nHe extends L10n {
     final intl.DateFormat jmsDateFormat = intl.DateFormat.jms(localeName);
     final String jmsString = jmsDateFormat.format(jms);
 
-    return '$ymdString $jmsString';
+    return '‏$ymdString‏ $jmsString';
   }
 
   @override
@@ -966,11 +1000,11 @@ class L10nHe extends L10n {
   }
 
   @override
-  String get appSync_nowTile_errorText_noDate => 'Last Sync (Error): N/A';
+  String get appSync_nowTile_errorText_noDate => 'סנכרון אחרון: (שגיאה): N/A';
 
   @override
   String appSync_nowTile_errorText(String dateStr) {
-    return 'Last Sync (Error): $dateStr';
+    return 'סנכרון אחרון (שגיאה): $dateStr';
   }
 
   @override
@@ -985,41 +1019,41 @@ class L10nHe extends L10n {
         );
     final String prtString = prtNumberFormat.format(prt);
 
-    return 'Syncing: $prtString';
+    return 'מתבצע סנכרון: $prtString';
   }
 
   @override
   String get appSync_nowTile_cancellingText => 'בתהליך ביטול...';
 
   @override
-  String get appSync_nowTile_cancelText_noDate => 'Last Sync (Cancelled): N/A';
+  String get appSync_nowTile_cancelText_noDate => 'סנכרון אחרון (בוטל): N/A';
 
   @override
   String appSync_nowTile_cancelText(String dateStr) {
-    return 'Last Sync (Cancelled): $dateStr';
+    return 'מועד סנכרון אחרון (בוטל): $dateStr';
   }
 
   @override
-  String get appSync_failedTile_titleText => 'Check Failure Logs';
+  String get appSync_failedTile_titleText => 'עיון ביומני כשל';
 
   @override
   String appSync_failedTile_errorText(String info) {
-    return '[Error]: $info';
+    return '[שגיאה]: $info';
   }
 
   @override
   String appSync_failedTile_webdavMulti_counterText(String reason, int count) {
-    return '$reason: $count';
+    return '$reason:‏ $count';
   }
 
   @override
   String appSync_webdav_resultStatus(String status) {
     String _temp0 = intl.Intl.selectLogic(status, {
-      'success': 'Completed',
-      'cancelled': 'Canceled',
-      'failed': 'Failed',
-      'multi': 'Multiple statuses',
-      'other': 'Unknown status',
+      'success': 'הושלם',
+      'cancelled': 'בוטל',
+      'failed': 'נכשל',
+      'multi': 'מצבים מרובים',
+      'other': 'מצב לא ידוע',
     });
     return '$_temp0';
   }
@@ -1027,11 +1061,11 @@ class L10nHe extends L10n {
   @override
   String appSync_webdav_resultStatus_withReason(String status, String reason) {
     String _temp0 = intl.Intl.selectLogic(status, {
-      'success': 'Completed due to $reason',
-      'cancelled': 'Canceled due to $reason',
-      'failed': 'Failed due to $reason',
-      'multi': 'Multiple statuses due to $reason',
-      'other': 'Unknown status',
+      'success': 'הושלם בשל $reason',
+      'cancelled': 'בוטל בשל $reason',
+      'failed': 'נכשל בשל $reason',
+      'multi': 'מצבים מרובים בשל $reason',
+      'other': 'מצב לא ידוע',
     });
     return '$_temp0';
   }
@@ -1039,45 +1073,44 @@ class L10nHe extends L10n {
   @override
   String appSync_webdav_resultReason(String reason) {
     String _temp0 = intl.Intl.selectLogic(reason, {
-      'error': 'Error',
-      'userAction': 'User action required',
-      'missingHabitUuid': 'Missing habit UUID',
-      'empty': 'Empty data',
-      'other': 'Unknown reason',
+      'error': 'שגיאה',
+      'userAction': 'נדרשת פעולה של המשתמש',
+      'missingHabitUuid': 'מזהה ההרגל חסר',
+      'empty': 'אין נתונים',
+      'other': 'סיבה לא ידועה',
     });
     return '$_temp0';
   }
 
   @override
-  String get appSync_webdav_newServerConfirmDialog_titleText => 'New Location';
+  String get appSync_webdav_newServerConfirmDialog_titleText => 'מיקום חדש';
 
   @override
   String get appSync_webdav_newServerConfirmDialog_subtitleText =>
-      'Syncing will create necessary directories and upload local habits to the server. Continue?';
+      'הסנכרון ייצור את התיקיות הנדרשות ויעלה את ההרגלים המקומיים לשרת. להמשיך?';
 
   @override
-  String get appSync_webdav_newServerConfirmDialog_confirmText => 'Sync Now!';
+  String get appSync_webdav_newServerConfirmDialog_confirmText => 'סנכרון כעת!';
 
   @override
-  String get appSync_webdav_oldServerConfirmDialog_titleText => 'Confirm Sync';
+  String get appSync_webdav_oldServerConfirmDialog_titleText => 'אישור הסנכרון';
 
   @override
   String get appSync_webdav_oldServerConfirmDialog_subtitleText =>
-      'Directory isn\'t empty. Syncing will merge server and local habits. Continue?';
+      'התיקייה אינה ריקה. הסנכרון ימזג את ההרגלים המקומיים עם אלה שבשרת. להמשיך?';
 
   @override
-  String get appSync_webdav_oldServerConfirmDialog_confirmText =>
-      'Confirm Merge';
+  String get appSync_webdav_oldServerConfirmDialog_confirmText => 'אישור מיזוג';
 
   @override
-  String get appSync_exportAllLogsTile_titleText => 'Export Failed Sync Logs';
+  String get appSync_exportAllLogsTile_titleText => 'ייצוא יומני הסנכרון שנכשל';
 
   @override
   String appSync_exportAllLogsTile_subtitleText(String isEmpty) {
     String _temp0 = intl.Intl.selectLogic(isEmpty, {
-      'true': 'No log founded',
-      'false': 'Tap to export',
-      'other': 'loading...',
+      'true': 'לא נמצאו יומנים',
+      'false': 'יש להקיש כאן כדי לייצא',
+      'other': 'בטעינה...',
     });
     return '$_temp0';
   }
@@ -1085,13 +1118,13 @@ class L10nHe extends L10n {
   @override
   String appSync_syncServerType_text(String name, String isCurrent) {
     String _temp0 = intl.Intl.selectLogic(isCurrent, {
-      'true': 'Current: ',
+      'true': 'כרגע: ',
       'other': '',
     });
     String _temp1 = intl.Intl.selectLogic(name, {
       'webdav': 'WebDAV',
-      'fake': 'Fake (Only For Debugger)',
-      'other': 'Unknown ($name)',
+      'fake': 'מזויף (לניפוי שגיאות בלבד)',
+      'other': 'לא ידוע ($name)',
     });
     return '$_temp0$_temp1';
   }
@@ -1099,9 +1132,9 @@ class L10nHe extends L10n {
   @override
   String appSync_networkType_text(String type) {
     String _temp0 = intl.Intl.selectLogic(type, {
-      'mobile': 'Mobile',
-      'wifi': 'Wifi',
-      'other': 'Unknown',
+      'mobile': 'נתונים ניידים',
+      'wifi': 'רשת אלחוטית',
+      'other': 'לא ידוע',
     });
     return '$_temp0';
   }
@@ -1109,89 +1142,88 @@ class L10nHe extends L10n {
   @override
   String appSync_syncInterval_text(String name) {
     String _temp0 = intl.Intl.selectLogic(name, {
-      'manual': 'Manual',
-      'minute5': '5 Minutes',
-      'minute15': '15 Minutes',
-      'minute30': '30 Minutes',
-      'hour1': '1 Hour',
-      'other': 'Unknown',
+      'manual': 'באופן ידני',
+      'minute5': '5 דקות',
+      'minute15': 'רבע שעה',
+      'minute30': 'חצי שעה',
+      'hour1': 'שעה',
+      'other': 'לא ידוע',
     });
     return '$_temp0';
   }
 
   @override
-  String get appSync_syncIntervalTile_title => 'Fetch Interval';
+  String get appSync_syncIntervalTile_title => 'מרווח זמן למשיכת נתונים';
 
   @override
-  String get appSync_summaryTile_title => 'Sync Server';
+  String get appSync_summaryTile_title => 'סנכרון עם השרת';
 
   @override
-  String get appSync_summaryTile_subtitle_text_notConfigured =>
-      'Not Configured';
+  String get appSync_summaryTile_subtitle_text_notConfigured => 'לא מוגדר';
 
   @override
   String get appSync_exportAllLogsTile_exportSubjectText =>
-      'All recent failed sync logs';
+      'כל יומני הכשל האחרונים של הסנכרון';
 
   @override
   String get appSync_serverEditor_saveDialog_titleText =>
-      'Confirm Save Changes';
+      'אישור שמירת השינויים';
 
   @override
   String get appSync_serverEditor_saveDialog_subtitleText =>
-      'Saving will overwrite previous server configuration.';
+      'השמירה תשכתב את הגדרות השרת הקודמות.';
 
   @override
-  String get appSync_serverEditor_exitDialog_titleText => 'Unsaved Changes';
+  String get appSync_serverEditor_exitDialog_titleText => 'שינויים שלא נשמרו';
 
   @override
   String get appSync_serverEditor_exitDialog_subtitleText =>
-      'Exiting will discard all unsaved changes.';
+      'היציאה תשליך את כל השינויים שלא נשמרו.';
 
   @override
-  String get appSync_serverEditor_deleteDialog_titleText => 'Confirm Delete';
+  String get appSync_serverEditor_deleteDialog_titleText => 'אישור מחיקה';
 
   @override
   String get appSync_serverEditor_deleteDialog_subtitleText =>
-      'Deleting will remove current server config.';
+      'המחיקה תסיר את הגדרת השרת הנוכחית.';
 
   @override
-  String get appSync_serverEditor_titleText_add => 'New Sync Server';
+  String get appSync_serverEditor_titleText_add => 'שרת סנכרון חדש';
 
   @override
-  String get appSync_serverEditor_titleText_modify => 'Modify Sync Server';
+  String get appSync_serverEditor_titleText_modify => 'עריכת שרת סנכרון';
 
   @override
-  String get appSync_serverEditor_advance_titleText => 'Advanced Configs';
+  String get appSync_serverEditor_advance_titleText => 'הגדרות מתקדמות';
 
   @override
-  String get appSync_serverEditor_pathTile_titleText => 'Path';
+  String get appSync_serverEditor_pathTile_titleText => 'נתיב';
 
   @override
   String get appSync_serverEditor_pathTile_hintText =>
-      'Enter a valid WebDAV path here.';
+      'נא למלא כאן נתיב תקני ל־WebDAV.';
 
   @override
   String get appSync_serverEditor_pathTile_errorText_emptyPath =>
-      'Path shouldn\'t be empty!';
+      'שדה הנתיב אינו יכול להיות ריק!';
 
   @override
-  String get appSync_serverEditor_usernameTile_titleText => 'Username';
+  String get appSync_serverEditor_usernameTile_titleText => 'שם משתמש';
 
   @override
   String get appSync_serverEditor_usernameTile_hintText =>
-      'Enter username here, leave empty if not required.';
+      'נא למלא כאן שם משתמש, אם אינו נדרש אפשר להשאיר שדה זה ריק.';
 
   @override
-  String get appSync_serverEditor_passwordTile_titleText => 'Password';
+  String get appSync_serverEditor_passwordTile_titleText => 'סיסמה';
 
   @override
   String get appSync_serverEditor_ignoreSSLTile_titleText =>
-      'Ignore SSL Certificate';
+      'התעלמות מתעודת SSL';
 
   @override
   String get appSync_serverEditor_timeoutTile_titleText =>
-      'Sync Timeout Seconds';
+      'שניות מוקצבות לסנכרון';
 
   @override
   String appSync_serverEditor_timeoutTile_hintText(int seconds, String unit) {
@@ -1199,17 +1231,17 @@ class L10nHe extends L10n {
       seconds,
       locale: localeName,
       other: '$seconds$unit',
-      zero: 'Infinite',
+      zero: 'ללא הגבלה',
     );
-    return 'Default: $_temp0';
+    return 'ברירת מחדל: $_temp0';
   }
 
   @override
-  String get appSync_serverEditor_timeoutTile_unitText => 's';
+  String get appSync_serverEditor_timeoutTile_unitText => 'שנ׳';
 
   @override
   String get appSync_serverEditor_connTimeoutTile_titleText =>
-      'Network Connection Timeout Seconds';
+      'כמות שניות מוקצבות לחיבור לרשת';
 
   @override
   String appSync_serverEditor_connTimeoutTile_hintText(
@@ -1220,17 +1252,17 @@ class L10nHe extends L10n {
       seconds,
       locale: localeName,
       other: '$seconds$unit',
-      zero: 'Infinite',
+      zero: 'ללא הגבלה',
     );
-    return 'Default: $_temp0';
+    return 'ברירת מחדל: $_temp0';
   }
 
   @override
-  String get appSync_serverEditor_connTimeoutTile_unitText => 's';
+  String get appSync_serverEditor_connTimeoutTile_unitText => 'שנ׳';
 
   @override
   String get appSync_serverEditor_connRetryCountTile_titleText =>
-      'Network Connection Retry Count';
+      'כמות ניסיונות חוזרים להתחברות לרשת';
 
   @override
   String appSync_serverEditor_connRetryCountTile_hintText(int count) {
@@ -1238,326 +1270,328 @@ class L10nHe extends L10n {
       count,
       locale: localeName,
       other: '$count',
-      zero: 'Retry disabled',
+      zero: 'הניסיונות החוזרים מושבתים',
     );
-    return 'Default: $_temp0';
+    return 'ברירת מחדל: $_temp0';
   }
 
   @override
-  String get appSync_serverEditor_netTypeTile_titleText => 'Network Sync Mode';
+  String get appSync_serverEditor_netTypeTile_titleText => 'מצב סנכרון רשת';
 
   @override
   String appSync_serverEditor_netTypeTile_typeTooltip(String type) {
     String _temp0 = intl.Intl.selectLogic(type, {
-      'mobile': 'Sync on Cellular Network',
-      'wifi': 'Sync on Wifi',
-      'other': 'Unknown',
+      'mobile': 'סנכרון באמצעות נתונים ניידים',
+      'wifi': 'סנכרון באמצעות רשת אלחוטית',
+      'other': 'לא ידוע',
     });
     return '$_temp0';
   }
 
   @override
-  String get appSync_serverEditor_netTypeTile_lowDataText => 'LowData';
+  String get appSync_serverEditor_netTypeTile_lowDataText => 'חיסכון בנתונים';
 
   @override
-  String get appSync_noti_readyToSync_body => 'Preparing to sync...';
+  String get appSync_noti_readyToSync_body => 'בהכנות לסנכרון...';
 
   @override
   String appSync_noti_syncing_title(String synced, String type) {
     String _temp0 = intl.Intl.selectLogic(synced, {
-      'synced': 'Synced ($type)',
-      'failed': 'Sync Failed ($type)',
-      'other': 'Syncing ($type)',
+      'synced': 'התבצע סנכרון של ($type)',
+      'failed': 'נכשל הסנכרון של ($type)',
+      'other': 'מתבצע סנכרון של ($type)',
     });
     return '$_temp0';
   }
 
   @override
   String get appSync_serverEditor_netTypeTile_lowDataTooltip =>
-      'Sync in Low Data Mode';
+      'סנכרון במצב חיסכון בנתונים';
 
   @override
   String get experimentalFeatures_warnginBanner_title =>
-      'One or more experimental features are enabled, Use with caution.';
+      'מופעלת תכונה ניסיונית אחת או יותר, השימוש באחריותך.';
 
   @override
-  String get experimentalFeatures_habitSyncTile_titleText => 'Habit Cloud Sync';
+  String get experimentalFeatures_habitSyncTile_titleText =>
+      'סנכרון הרגלים עם הענן';
 
   @override
   String get experimentalFeatures_habitSyncTile_subtitleText =>
-      'Once enabled, the app\'s sync option will appear in settings';
+      'לאחר ההפעלה, אפשרות הסנכרון של היישום תופיע בהגדרות';
 
   @override
   String experimentalFeatures_warnTile_titleText(String syncName) {
-    return 'Experimental feature ($syncName) is disabled, but the function is still running.';
+    return 'התכונה הניסיונית ($syncName) מושבתת, אך הרכיבים שלה עדיין פועלים.';
   }
 
   @override
   String experimentalFeatures_warnTile_forHabitSyncText(String menuName) {
-    return 'To completely disable, long press to access \'$menuName\' and turn it off.';
+    return 'לצורך השבתה מלאה, יש לגשת אל ‚$menuName’ בעזרת לחיצה ארוכה ולכבות.';
   }
 
   @override
-  String get experimentalFeatures_habitSearchTile_titleText => 'Habit Search';
+  String get experimentalFeatures_habitSearchTile_titleText => 'חיפוש הרגלים';
 
   @override
   String get experimentalFeatures_habitSearchTile_subtitleText =>
-      'Once enabled, a search bar will appear at the top of the Habits screen and allowing to search habits.';
+      'לאחר ההפעלה, תופיע שורת חיפוש בחלק העליון של מסך ההרגלים ויהיה ניתן לחפש הרגלים.';
 
   @override
-  String get appAbout_appbarTile_titleText => 'About';
+  String get appAbout_appbarTile_titleText => 'על אודות';
 
   @override
   String appAbout_versionTile_titleText(String appVersion) {
-    return 'Version: $appVersion';
+    return 'גרסה: $appVersion';
   }
 
   @override
-  String get appAbout_versionTile_changeLogPath => 'CHANGELOG.md';
+  String get appAbout_versionTile_changeLogPath => '‏CHANGELOG.md';
 
   @override
-  String get appAbout_sourceCodeTile_titleText => 'Source code';
+  String get appAbout_sourceCodeTile_titleText => 'קוד מקור';
 
   @override
-  String get appAbout_issueTrackerTile_titleText => 'Issue tracker';
+  String get appAbout_issueTrackerTile_titleText => 'מעקב אחר תקלות';
 
   @override
-  String get appAbout_contactEmailTile_titleText => 'Contact me';
+  String get appAbout_contactEmailTile_titleText => 'יצירת קשר עם המפתח';
 
   @override
   String get appAbout_contactEmailTile_emailBody =>
-      'Hi, I\'m glad you reached out to me.\nIf you\'re reporting a bug, please indicate the app version and describe the steps to reproduce it.\n--------------------------------------';
+      'היי, אני שמח שבחרת ליצור איתי קשר.\nאם רצית לדווח על תקלה, נא לציין מה גרסת היישום ולתאר בשפה האנגלית את הצעדים לשחזור התקלה מחדש.\n--------------------------------------';
 
   @override
-  String get appAbout_licenseTile_titleText => 'License';
+  String get appAbout_licenseTile_titleText => 'רישיון';
 
   @override
-  String get appAbout_licenseTile_subtitleText => 'Apache License, Version 2.0';
+  String get appAbout_licenseTile_subtitleText => 'רישיון Apache, גרסה 2.0';
 
   @override
   String get appAbout_licenseThirdPartyTile_titleText =>
-      'Third Party Licensing Statement';
+      'הצהרת רישיון צד שלישי';
 
   @override
-  String get appAbout_licenseThirdPartyTile_subtitleText => 'flutter';
+  String get appAbout_licenseThirdPartyTile_subtitleText => 'Flutter';
 
   @override
-  String get appAbout_privacyTile_titleText => 'Privacy';
+  String get appAbout_privacyTile_titleText => 'פרטיות';
 
   @override
   String get appAbout_privacyTile_subTitleText =>
-      'Access the privacy policy in this app';
+      'עיון במדיניות הפרטיות של יישום זה';
 
   @override
-  String get appAbout_donateTile_titleText => 'Donate';
+  String get appAbout_donateTile_titleText => 'תרומה';
 
   @override
   String get appAbout_donateTile_subTitleText =>
-      'I\'m a personal developer. If you like this app, please buy me a ☕.';
+      'אני מפתח עצמאי. אם אהבת את היישום, אפשר לקנות לי ☕.';
 
   @override
   String get appAbout_donateTile_ways =>
       '@paypal,@buyMeACoffee,@alipay,@wechatPay,@cryptoCurrencyAll';
 
   @override
-  String get donateWay_paypal => 'Paypal';
+  String get donateWay_paypal => 'פייפאל';
 
   @override
-  String get donateWay_buyMeACoffee => 'Buy me a coffee';
+  String get donateWay_buyMeACoffee => '‏Buy me a coffee';
 
   @override
-  String get donateWay_alipay => 'Alipay';
+  String get donateWay_alipay => '‏Alipay';
 
   @override
-  String get donateWay_wechatPay => 'Wechat Pay';
+  String get donateWay_wechatPay => '‏Wechat Pay';
 
   @override
-  String get donateWay_cryptoCurrency => 'Crypto Currencies';
+  String get donateWay_cryptoCurrency => 'מטבעות קריפטו';
 
   @override
-  String get donateWay_cryptoCurrency_BTC => 'BTC';
+  String get donateWay_cryptoCurrency_BTC => '‏BTC';
 
   @override
-  String get donateWay_cryptoCurrency_ETH => 'ETH';
+  String get donateWay_cryptoCurrency_ETH => '‏ETH';
 
   @override
-  String get donateWay_cryptoCurrency_BNB => 'BNB';
+  String get donateWay_cryptoCurrency_BNB => '‏BNB';
 
   @override
-  String get donateWay_cryptoCurrency_AVAX => 'AVAX';
+  String get donateWay_cryptoCurrency_AVAX => '‏AVAX';
 
   @override
-  String get donateWay_cryptoCurrency_FTM => 'FTM';
+  String get donateWay_cryptoCurrency_FTM => '‏FTM';
 
   @override
-  String get donateWay_firstQRGroup => 'Alipay & Wechat Pay';
+  String get donateWay_firstQRGroup => '‏Alipay ו־Wechat Pay';
 
   @override
   String appAbout_donateDialog_copiedCrypto_msg(String name) {
-    return 'Copied $name\'s Address';
+    return 'הועתקה הכתובת של $name';
   }
 
   @override
-  String get batchCheckin_appbar_title => 'Batch Check-in';
+  String get batchCheckin_appbar_title => 'סימון כמותי';
 
   @override
-  String get batchCheckin_datePicker_prevButton_tooltip => 'Previous day';
+  String get batchCheckin_datePicker_prevButton_tooltip => 'היום הקודם';
 
   @override
-  String get batchCheckin_datePicker_nextButton_tooltip => 'Next day';
+  String get batchCheckin_datePicker_nextButton_tooltip => 'היום הבא';
 
   @override
-  String get batchCheckin_status_skip_text => 'Skip';
+  String get batchCheckin_status_skip_text => 'דילוג';
 
   @override
-  String get batchCheckin_status_ok_text => 'Complete';
+  String get batchCheckin_status_ok_text => 'הושלם';
 
   @override
-  String get batchCheckin_status_double_text => 'x2 Hit!';
+  String get batchCheckin_status_double_text => 'פעמיים ברצף!';
 
   @override
-  String get batchCheckin_status_zero_text => 'Incomplete';
+  String get batchCheckin_status_zero_text => 'לא הושלם';
 
   @override
   String batchCheckin_habits_groupTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Habits',
-      one: 'Habit',
+      other: 'נבחרו $count הרגלים',
+      one: 'נבחר הרגל אחד',
     );
-    return '$count $_temp0 selected';
+    return '$_temp0';
   }
 
   @override
-  String get batchCheckin_save_button_text => 'Save';
+  String get batchCheckin_save_button_text => 'שמירה';
 
   @override
-  String get batchCheckin_reset_button_text => 'Reset';
+  String get batchCheckin_reset_button_text => 'איפוס';
 
   @override
   String batchCheckin_completed_snackbar_text(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'status of $count habits',
-      one: 'habit\'s status',
+      other: 'מצבם של $count הרגלים',
+      one: 'מצב ההרגל',
     );
-    return 'Modified $_temp0';
+    return 'השתנה $_temp0';
   }
 
   @override
-  String get batchCheckin_save_confirmDialog_title =>
-      'Overwrite Existing Records';
+  String get batchCheckin_save_confirmDialog_title => 'שכתוב רשומות קיימות';
 
   @override
   String get batchCheckin_save_confirmDialog_body =>
-      'Existing records will be overwritten After saving, previous records will be lost.';
+      'הרשומות הקיימות ישוכתבו לאחר השמירה, הרשומות הקודמות יימחקו.';
 
   @override
-  String get batchCheckin_save_confirmDialog_confirmButton_text => 'save';
+  String get batchCheckin_save_confirmDialog_confirmButton_text => 'שמירה';
 
   @override
-  String get batchCheckin_save_confirmDialog_cancelButton_text => 'cancel';
+  String get batchCheckin_save_confirmDialog_cancelButton_text => 'ביטול';
 
   @override
-  String get batchCheckin_close_confirmDialog_title => 'Confirm Return';
+  String get batchCheckin_close_confirmDialog_title => 'אישור חזרה';
 
   @override
   String get batchCheckin_close_confirmDialog_body =>
-      'Check-in Status Changes won\'t be applied before saved';
+      'השינויים במצב הסימון לא יוחלו עד שיישמרו';
 
   @override
-  String get batchCheckin_close_confirmDialog_confirmButton_text => 'exit';
+  String get batchCheckin_close_confirmDialog_confirmButton_text => 'יציאה';
 
   @override
-  String get batchCheckin_close_confirmDialog_cancelButton_text => 'cancel';
+  String get batchCheckin_close_confirmDialog_cancelButton_text => 'ביטול';
 
   @override
-  String get appReminder_dailyReminder_title =>
-      '🏝 Did you stick to your habits today?';
+  String get appReminder_dailyReminder_title => '🏝 האם דבקת בהרגלים שלך היום?';
 
   @override
   String get appReminder_dailyReminder_body =>
-      'click to enter app and punch in on time.';
+      'חשוב לסמן את ההרגל בזמן בעזרת לחיצה וכניסה ליישום.';
 
   @override
-  String get common_habitColorType_cc1 => 'Deep lilac';
+  String get common_habitColorType_cc1 => 'סגול כהה';
 
   @override
-  String get common_habitColorType_cc2 => 'Red';
+  String get common_habitColorType_cc2 => 'אדום';
 
   @override
-  String get common_habitColorType_cc3 => 'Purple';
+  String get common_habitColorType_cc3 => 'סגול';
 
   @override
-  String get common_habitColorType_cc4 => 'Royal blue';
+  String get common_habitColorType_cc4 => 'כחול רויאל';
 
   @override
-  String get common_habitColorType_cc5 => 'Dark cyan';
+  String get common_habitColorType_cc5 => 'טורקיז';
 
   @override
-  String get common_habitColorType_cc6 => 'Green';
+  String get common_habitColorType_cc6 => 'ירוק';
 
   @override
-  String get common_habitColorType_cc7 => 'Amber';
+  String get common_habitColorType_cc7 => 'ענבר';
 
   @override
-  String get common_habitColorType_cc8 => 'Orange';
+  String get common_habitColorType_cc8 => 'כתום';
 
   @override
-  String get common_habitColorType_cc9 => 'Lime green';
+  String get common_habitColorType_cc9 => 'ירוק לימון';
 
   @override
-  String get common_habitColorType_cc10 => 'Dark orchid';
+  String get common_habitColorType_cc10 => 'ורוד כהה';
+
+  @override
+  String get common_habitColorType_custom => 'Custom';
 
   @override
   String common_habitColorType_default(int index) {
-    return 'Color $index';
+    return 'צבע $index';
   }
 
   @override
-  String get common_appThemeColor_system => 'System';
+  String get common_appThemeColor_system => 'מערכת';
 
   @override
-  String get common_appThemeColor_primary => 'Primary';
+  String get common_appThemeColor_primary => 'ראשי';
 
   @override
-  String get common_appThemeColor_dynamic => 'Dynamic';
+  String get common_appThemeColor_dynamic => 'דינמי';
 
   @override
   String get common_customDateTimeFormatPicker_useSystemFormat_text =>
-      'Use system format';
+      'שימוש בתבניות המערכת';
 
   @override
-  String get common_customDateTimeFormatPicker_fmtTileText => 'Date format';
+  String get common_customDateTimeFormatPicker_fmtTileText => 'תבניות תאריכים';
 
   @override
-  String get common_customDateTimeFormatPicker_ymd_text => 'Year Month Day';
+  String get common_customDateTimeFormatPicker_ymd_text => 'שנה חודש יום';
 
   @override
-  String get common_customDateTimeFormatPicker_mdy_text => 'Month Day Year';
+  String get common_customDateTimeFormatPicker_mdy_text => 'חודש יום שנה';
 
   @override
-  String get common_customDateTimeFormatPicker_dmy_text => 'Day Month Year';
+  String get common_customDateTimeFormatPicker_dmy_text => 'יום חודש שנה';
 
   @override
-  String get common_customDateTimeFormatPicker_SepTileText => 'Separator';
+  String get common_customDateTimeFormatPicker_SepTileText => 'מפריד';
 
   @override
-  String get common_customDateTimeFormatPicker_sepDash_text => 'Dash';
+  String get common_customDateTimeFormatPicker_sepDash_text => 'קו מפריד';
 
   @override
-  String get common_customDateTimeFormatPicker_sepSlash_text => 'Slash';
+  String get common_customDateTimeFormatPicker_sepSlash_text => 'קו נטוי';
 
   @override
-  String get common_customDateTimeFormatPicker_sepSpace_text => 'Space';
+  String get common_customDateTimeFormatPicker_sepSpace_text => 'רווח';
 
   @override
-  String get common_customDateTimeFormatPicker_sepDot_text => 'Dot';
+  String get common_customDateTimeFormatPicker_sepDot_text => 'נקודה';
 
   @override
-  String get common_customDateTimeFormatPicker_empty_text => 'No Separator';
+  String get common_customDateTimeFormatPicker_empty_text => 'ללא מפריד';
 
   @override
   String common_customDateTimeFormatPicker_sep_formatter(
@@ -1569,205 +1603,204 @@ class L10nHe extends L10n {
 
   @override
   String get common_customDateTimeFormatPicker_12Hour_text =>
-      'Use 12-hour format';
+      'שימוש בתבנית 12 שעות';
 
   @override
   String get common_customDateTimeFormatPicker_monthName_text =>
-      'Use full name';
+      'שימוש בשם המלא';
 
   @override
   String get common_customDateTimeFormatPicker_applyFreqChart_text =>
-      'Apply for Freq Chart';
+      'החלה על תרשים התדירות';
 
   @override
   String get common_customDateTimeFormatPicker_applyHeapmap_text =>
-      'Apply for Calendar';
+      'החלה על לוח השנה';
 
   @override
-  String get common_customDateTimeFormatPicker_cancelButton_text => 'cancel';
+  String get common_customDateTimeFormatPicker_cancelButton_text => 'ביטול';
 
   @override
-  String get common_customDateTimeFormatPicker_confirmButton_text => 'confirm';
+  String get common_customDateTimeFormatPicker_confirmButton_text => 'אישור';
 
   @override
-  String get common_errorPage_title => 'Oops, Crashed!';
+  String get common_errorPage_title => 'אופס, קרסנו!';
 
   @override
-  String get common_errorPage_copied => 'Copied crash information';
+  String get common_errorPage_copied => 'מידע הקריסה הועתק';
 
   @override
-  String get common_enable_text => 'Enabled';
+  String get common_enable_text => 'מופעל';
 
   @override
-  String get calendarPicker_clip_today => 'Today';
+  String get calendarPicker_clip_today => 'היום';
 
   @override
-  String get calendarPicker_clip_tomorrow => 'Tomorrow';
+  String get calendarPicker_clip_tomorrow => 'מחר';
 
   @override
   String calendarPicker_clip_after7Days(DateTime date) {
     final intl.DateFormat dateDateFormat = intl.DateFormat.E(localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return 'Next $dateString';
+    return '$dateString הבא';
   }
 
   @override
-  String get exportConfirmDialog_title_exportAll => 'Export all habits?';
+  String get exportConfirmDialog_title_exportAll => 'לייצא את כל ההרגלים?';
 
   @override
   String exportConfirmDialog_title_exportMulti(int number) {
     String _temp0 = intl.Intl.pluralLogic(
       number,
       locale: localeName,
-      other: '$number habits',
-      one: '1 habit',
-      zero: 'current habit',
+      other: '$number הרגלים',
+      one: 'הרגל אחד',
+      zero: 'את ההרגל הנוכחי',
     );
-    return 'Export $_temp0?';
+    return 'לייצא $_temp0?';
   }
 
   @override
-  String get exportConfirmDialog_option_includeRecords => 'include records';
+  String get exportConfirmDialog_option_includeRecords => 'לכלול רשומות';
 
   @override
-  String get exportConfirmDialog_cancel_buttonText => 'cancel';
+  String get exportConfirmDialog_cancel_buttonText => 'ביטול';
 
   @override
-  String get exportConfirmDialog_confirm_buttonText => 'export';
+  String get exportConfirmDialog_confirm_buttonText => 'ייצוא';
 
   @override
-  String get debug_logLevelTile_title => 'Logging Level';
+  String get debug_logLevelTile_title => 'רמת תיעוד ביומן';
 
   @override
-  String get debug_logLevelDialog_title => 'Change Logging Level';
+  String get debug_logLevelDialog_title => 'שינוי רמת התיעוד ביומן';
 
   @override
-  String get debug_logLevel_debug => 'Debug';
+  String get debug_logLevel_debug => 'ניפוי שגיאות';
 
   @override
-  String get debug_logLevel_info => 'Info';
+  String get debug_logLevel_info => 'מידע';
 
   @override
-  String get debug_logLevel_warn => 'Warning';
+  String get debug_logLevel_warn => 'אזהרה';
 
   @override
-  String get debug_logLevel_error => 'Error';
+  String get debug_logLevel_error => 'שגיאה';
 
   @override
-  String get debug_logLevel_fatal => 'Fatal';
+  String get debug_logLevel_fatal => 'שגיאה חמורה';
 
   @override
-  String get debug_collectLogTile_title => 'Collecting Logs';
+  String get debug_collectLogTile_title => 'הנתונים נאספים ביומן';
 
   @override
   String get debug_collectLogTile_enable_subtitle =>
-      'Tap to stop logging collection.';
+      'הקשה כאן תפסיק את איסוף הנתונים ביומן.';
 
   @override
   String get debug_collectLogTile_disable_subtitle =>
-      'Tap to start logging collection.';
+      'הקשה כאן תתחיל את איסוף הנתונים ביומן.';
 
   @override
-  String get debug_downladDebugLogs_subject => 'Downloading debugging logs';
+  String get debug_downladDebugLogs_subject => 'יומני ניפוי השגיאות מתקבלים';
 
   @override
   String get dbeug_clearDebugLogs_complete_snackbar =>
-      'Debugging logs Cleared.';
+      'נוקו יומני ניפוי השגיאות.';
 
   @override
-  String get debug_downladDebugInfo_subject =>
-      'Downloading debugging information';
+  String get debug_downladDebugInfo_subject => 'מידע ניפוי השגיאות מתקבל';
 
   @override
   String debug_downladDebugZip_subject(String fileName) {
-    return 'Downloading $fileName';
+    return 'מתבצעת הורדת $fileName';
   }
 
   @override
-  String get debug_missingDebugLogFile_snackbar => 'Debug log doesn\'t exist.';
+  String get debug_missingDebugLogFile_snackbar =>
+      'יומן ניפוי השגיאות אינו קיים.';
 
   @override
-  String get debug_debuggerLogCard_title => 'Logging Information';
+  String get debug_debuggerLogCard_title => 'מידע על התיעוד ביומן';
 
   @override
   String get debug_debuggerLogCard_subtitle =>
-      'Includes local debugging log information, need to turn on the log collection switcher.';
+      'כולל מידע על יומני ניפוי שגיאות מקומיים, צריך להפעיל את מתג איסוף הנתונים ביומן.';
 
   @override
-  String get debug_debuggerLogCard_saveButton_text => 'Download';
+  String get debug_debuggerLogCard_saveButton_text => 'הורדה';
 
   @override
-  String get debug_debuggerLogCard_clearButton_text => 'Clear';
+  String get debug_debuggerLogCard_clearButton_text => 'ניקוי';
 
   @override
-  String get debug_debuggerInfoCard_title => 'Debugging Information';
+  String get debug_debuggerInfoCard_title => 'מידע על ניפוי השגיאות';
 
   @override
   String get debug_debuggerInfoCard_subtitle =>
-      'Includes app\'s debugging information.';
+      'כולל את המידע על ניפוי השגיאות ביישום.';
 
   @override
-  String get debug_debuggerInfoCard_openButton_text => 'Open';
+  String get debug_debuggerInfoCard_openButton_text => 'פתיחה';
 
   @override
-  String get debug_debuggerInfoCard_saveButton_text => 'Save';
+  String get debug_debuggerInfoCard_saveButton_text => 'שמירה';
 
   @override
-  String get debug_debuggerInfo_notificationTitle =>
-      'Collecting App\'s Info...';
+  String get debug_debuggerInfo_notificationTitle => 'נאסף מידע על היישום...';
 
   @override
   String confirmDialog_confirm_text(String type) {
     String _temp0 = intl.Intl.selectLogic(type, {
-      'save': 'Save',
-      'exit': 'Exit',
-      'delete': 'Delete',
-      'other': 'Confirm',
+      'save': 'שמירה',
+      'exit': 'יציאה',
+      'delete': 'מחיקה',
+      'other': 'אישור',
     });
     return '$_temp0';
   }
 
   @override
-  String get confirmDialog_cancel_text => 'Cancel';
+  String get confirmDialog_cancel_text => 'ביטול';
 
   @override
-  String get snackbar_undoText => 'UNDO';
+  String get snackbar_undoText => 'ביטול';
 
   @override
-  String get snackbar_dismissText => 'DISMISS';
+  String get snackbar_dismissText => 'ביטול';
 
   @override
-  String get contributors_tile_title => 'Contributors';
+  String get contributors_tile_title => 'תורמים';
 
   @override
-  String get userAction_tap => 'Tap';
+  String get userAction_tap => 'הקשה';
 
   @override
-  String get userAction_doubleTap => 'Double';
+  String get userAction_doubleTap => 'כפולה';
 
   @override
-  String get userAction_longTap => 'Long';
+  String get userAction_longTap => 'ארוכה';
 
   @override
-  String get channelName_habitReminder => 'Habit Reminder';
+  String get channelName_habitReminder => 'תזכורת להרגל';
 
   @override
-  String get channelName_appReminder => 'Prompt';
+  String get channelName_appReminder => 'הוראה';
 
   @override
-  String get channelName_appDebugger => 'Debugger';
+  String get channelName_appDebugger => 'כלי ניפוי שגיאות';
 
   @override
-  String get channelName_appSyncing => 'Sync Process';
+  String get channelName_appSyncing => 'התקדמות הסנכרון';
 
   @override
   String get channelDesc_appSyncing =>
-      'Used to show sync progress and non-failure results';
+      'משמשת להצגת התקדמות הסנכרון ותוצאות שאינן כישלון';
 
   @override
-  String get channelName_appSyncFailed => 'Sync Failed';
+  String get channelName_appSyncFailed => 'הסנכרון נכשל';
 
   @override
-  String get channelDesc_appSyncFailed => 'Used to alert when sync fails';
+  String get channelDesc_appSyncFailed => 'משמשת להתרעה על סנכרון שנכשל';
 }

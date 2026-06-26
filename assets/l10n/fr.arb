@@ -178,6 +178,10 @@
     "habitEdit_modify_datetime_prefix": "Modifiée: ",
     "habitDisplay_fab_text": "Nouvelle habitude",
     "habitDisplay_emptyImage_text_01": "Un voyage de mille lieux commence par un pas",
+    "habitDisplay_notFoundImage_text_01": "Aucune habitudes similaires trouvées",
+    "@habitDisplay_notFoundImage_text_01": {
+        "description": "Displayed when no habits match the current search"
+    },
     "habitDisplay_archiveHabitsConfirmDialog_title": "Archiver les habitudes sélectionnées ?",
     "habitDisplay_archiveHabitsConfirmDialog_confirm": "Confirmer",
     "habitDisplay_archiveHabitsConfirmDialog_cancel": "Annuler",
@@ -359,6 +363,7 @@
     "habitDetail_editHeatmapCal_dateButtonText": "date",
     "habitDetail_editHeatmapCal_valueButtonText": "valeur",
     "habitDetail_editHeatmapCal_backToToday_tooltipText": "revenir à aujourd’hui",
+    "common_loadError_retryText": "Essayez une nouvelle fois",
     "habitDetail_notFoundText": "Échec du chargement de l’habitude",
     "habitDetail_notFoundRetryText": "Essayez une nouvelle fois",
     "habitDetail_changeGoal_title": "Modifier l’objectif",

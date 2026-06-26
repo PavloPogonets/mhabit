@@ -50,7 +50,9 @@ const String appSyncFailedZipFile = "app_sync_failed.zip";
 /// - add daily goal extra column
 /// ## version 4
 /// - add sync table
-const int appDBVersion = 4;
+/// ## version 5
+/// - add custom_color and custom_color_tinted columns
+const int appDBVersion = 5;
 //#endregion
 
 //#region app-theme
@@ -72,6 +74,8 @@ const appSupportedLocales = [
   Locale.fromSubtags(languageCode: 'cs'),
   Locale.fromSubtags(languageCode: 'de'),
   Locale.fromSubtags(languageCode: 'es'),
+  // TODO(l10n::eu): remove kDebugMode below after translation
+  if (kDebugMode) Locale.fromSubtags(languageCode: 'eu'),
   Locale.fromSubtags(languageCode: 'fa'),
   Locale.fromSubtags(languageCode: 'fr'),
   Locale.fromSubtags(languageCode: 'he'),

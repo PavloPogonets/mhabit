@@ -30,22 +30,19 @@ import '../../l10n/localizations.dart';
 import '../../logging/helper.dart';
 import '../../models/app_event.dart';
 import '../../models/custom_date_format.dart';
+import '../../models/habit_color.dart';
 import '../../models/habit_date.dart';
 import '../../models/habit_detail_chart.dart';
 import '../../models/habit_display.dart';
 import '../../models/habit_form.dart';
 import '../../models/habit_status.dart';
-import '../../providers/app_custom_date_format.dart';
-import '../../providers/app_developer.dart';
-import '../../providers/app_event.dart';
-import '../../providers/app_first_day.dart';
-import '../../providers/app_sync.dart';
-import '../../providers/habit_detail.dart';
-import '../../providers/habit_detail_freqchart.dart';
-import '../../providers/habit_detail_scorechart.dart';
-import '../../providers/habit_summary.dart' as habit_summary;
-import '../../providers/habits_file_exporter.dart';
-import '../../providers/utils.dart';
+import '../../providers/app_ui/app_custom_date_format.dart';
+import '../../providers/app_ui/app_developer.dart';
+import '../../providers/app_ui/app_first_day.dart';
+import '../../providers/support/utils.dart';
+import '../../providers/workflow/app_event.dart';
+import '../../providers/workflow/app_sync.dart';
+import '../../providers/workflow/habits_file_exporter.dart';
 import '../../storage/db/handlers/habit.dart';
 import '../../theme/color.dart';
 import '../../theme/icon.dart';
@@ -56,27 +53,45 @@ import '../../widgets/widgets.dart';
 import '../common/debug.dart';
 import '../common/widgets.dart';
 import '../habit_edit/page.dart' as habit_edit;
+import '../habits_display/_providers/habit_summary.dart' as habit_summary;
+import '_providers/habit_detail.dart';
+import '_providers/habit_detail_freqchart.dart';
+import '_providers/habit_detail_scorechart.dart';
 import 'widgets.dart';
 
 const _largeScreenTwoChartBetween = 16.0;
 
+enum DetailPageReturnOpr { unknown, deleted }
+
+class DetailPageReturn {
+  final DetailPageReturnOpr op;
+  final String? habitName;
+  final List<HabitStatusChangedRecord>? recordList;
+
+  const DetailPageReturn({
+    this.op = DetailPageReturnOpr.unknown,
+    this.habitName,
+    this.recordList,
+  });
+}
+
 Future<DetailPageReturn?> naviToHabitDetailPage({
   required BuildContext context,
   required HabitUUID habitUUID,
-  HabitColorType? colorType,
+  HabitColor? color,
   habit_summary.HabitSummaryViewModel? summary,
 }) async {
   return Navigator.of(context).push<DetailPageReturn>(
     MaterialPageRoute(
       builder: (context) => Provider.value(
         value: summary?.buildHabitDetailAdapter(),
-        child: HabitDetailPage(habitUUID: habitUUID, colorType: colorType),
+        child: HabitDetailPage(habitUUID: habitUUID, color: color),
       ),
     ),
   );
 }
 
-extension _AppEventViewModelExtension on AppEventViewModel {
+extension _AppEventBusExtension on AppEventBus {
   void pushHabitChangeStatus(HabitStatusChangedRecord result, {String? msg}) {
     push(
       HabitStatusChangedEvent(
@@ -97,28 +112,28 @@ extension _AppEventViewModelExtension on AppEventViewModel {
 /// - Required for builder:
 ///   - [AppFirstDayViewModel]
 /// - Required for callback:
-///   - [HabitFileExporterViewModel]
+///   - [HabitFileExportRunner]
 /// - Optional:
 ///   - [habit_summary.HabitDetailAdapter]
 class HabitDetailPage extends StatelessWidget {
   final HabitUUID habitUUID;
-  final HabitColorType? colorType;
+  final HabitColor? color;
 
-  const HabitDetailPage({super.key, required this.habitUUID, this.colorType});
+  const HabitDetailPage({super.key, required this.habitUUID, this.color});
 
   @override
   Widget build(BuildContext context) {
     return PageProviders(
-      child: _Page(habitUUID: habitUUID, colorType: colorType),
+      child: _Page(habitUUID: habitUUID, color: color),
     );
   }
 }
 
 class _Page extends StatefulWidget {
   final HabitUUID habitUUID;
-  final HabitColorType? colorType;
+  final HabitColor? color;
 
-  const _Page({required this.habitUUID, this.colorType});
+  const _Page({required this.habitUUID, this.color});
 
   @override
   State<StatefulWidget> createState() => _PageState();
@@ -128,6 +143,7 @@ class _PageState extends State<_Page>
     with HabitHeatmapColorChooseMixin<_Page>, XShare {
   late HabitDetailViewModel _vm;
   habit_summary.HabitDetailAdapter? _summary;
+  Future<void>? _loadDataFuture;
 
   @override
   void initState() {
@@ -143,6 +159,7 @@ class _PageState extends State<_Page>
     final vm = context.read<HabitDetailViewModel>();
     if (_vm != vm) {
       _vm = vm;
+      _loadDataFuture = null;
     }
     final summary = context.maybeRead<habit_summary.HabitDetailAdapter>();
     if (_summary != summary) {
@@ -171,7 +188,7 @@ class _PageState extends State<_Page>
     if (!(mounted && _vm.mounted)) return false;
     _vm.requestReload();
     if (_summary?.mounted != true) {
-      context.read<AppEventViewModel>().push(
+      context.read<AppEventBus>().push(
         const ReloadDataEvent(
           msg: "habit_detail._enterHabitEditPage",
           trace: {
@@ -223,7 +240,7 @@ class _PageState extends State<_Page>
 
     await showHabitEditReplacementRecordCalendarDialog(
       context: context,
-      habitColorType: _vm.habitColorType,
+      habitColor: _vm.habitColor,
       firstday: _vm.firstday,
       detail: _vm,
     );
@@ -231,7 +248,7 @@ class _PageState extends State<_Page>
     if (!(mounted && _vm.mounted)) return;
     if (_vm.getInsideVersion() == oldVersion) return;
     if (_summary?.mounted != true) {
-      context.read<AppEventViewModel>().push(
+      context.read<AppEventBus>().push(
         const ReloadDataEvent(
           msg: "habit_detail._openEditDialog",
           trace: {
@@ -272,10 +289,9 @@ class _PageState extends State<_Page>
     if (!mounted) return;
     // try sync once
     if (shouldSyncOnce) {
-      final sync = context.maybeRead<AppSyncViewModel>();
-      if (sync != null && sync.mounted) {
-        sync.delayedStartTaskOnce(delay: kAppUndoDialogShowDuration * 2);
-      }
+      context.maybeRead<AppSyncTriggerAccess>()?.delayedStartTaskOnce(
+        delay: kAppUndoDialogShowDuration * 2,
+      );
     }
   }
 
@@ -292,7 +308,7 @@ class _PageState extends State<_Page>
     if (_summary?.mounted != true) {
       final result = await _vm.onConfirmToArchiveHabit();
       if (result == null || !mounted) return;
-      context.read<AppEventViewModel>().pushHabitChangeStatus(
+      context.read<AppEventBus>().pushHabitChangeStatus(
         result,
         msg: "habit_detail._openHabitArchiveConfirmDialog",
       );
@@ -321,7 +337,7 @@ class _PageState extends State<_Page>
     if (_summary?.mounted != true) {
       final result = await _vm.onConfirmToUnarchiveHabit();
       if (result == null || !mounted) return;
-      context.read<AppEventViewModel>().pushHabitChangeStatus(
+      context.read<AppEventBus>().pushHabitChangeStatus(
         result,
         msg: "habit_detail._openHabitUnarchiveConfirmDialog",
       );
@@ -352,7 +368,7 @@ class _PageState extends State<_Page>
       if (_summary?.mounted != true) {
         final changedRecord = await _vm.onConfirmToDeleteHabit();
         if (changedRecord == null || !mounted) return null;
-        context.read<AppEventViewModel>().pushHabitChangeStatus(
+        context.read<AppEventBus>().pushHabitChangeStatus(
           changedRecord,
           msg: "habit_detail._openHabitDeleteConfirmDialog",
         );
@@ -379,7 +395,7 @@ class _PageState extends State<_Page>
   }
 
   void _exportHabitAndShared(BuildContext context) async {
-    HabitFileExporterViewModel fileExporter;
+    HabitFileExportRunner fileExporter;
 
     if (!context.mounted) return;
     final confirmResult = await showExporterConfirmDialog(
@@ -388,7 +404,7 @@ class _PageState extends State<_Page>
     );
 
     if (!context.mounted || confirmResult == null) return;
-    fileExporter = context.read<HabitFileExporterViewModel>();
+    fileExporter = context.read<HabitFileExportRunner>();
     final filePath = await fileExporter.exportHabitData(
       widget.habitUUID,
       withRecords: confirmResult == ExporterConfirmResultType.withRecords,
@@ -452,20 +468,22 @@ class _PageState extends State<_Page>
   Future<void> loadData() async {
     if (!mounted) return;
     final minBarShowTimeFuture = Future.delayed(kHabitDetailFutureLoadDuration);
-    if (!_vm.isDataLoading) {
+    if (!_vm.hasLoad) {
       await Future.wait([_vm.loadData(widget.habitUUID), minBarShowTimeFuture]);
     }
   }
+
+  Future<void> _resolveLoadDataFuture({bool forceReload = false}) =>
+      forceReload || _loadDataFuture == null
+      ? _loadDataFuture = loadData()
+      : _loadDataFuture!;
 
   @override
   Widget build(BuildContext context) {
     appLog.build.debug(context);
 
     Widget buildAppbar(BuildContext context) {
-      Widget buildAppbarAction(
-        BuildContext context,
-        HabitColorType? colorType,
-      ) {
+      Widget buildAppbarAction(BuildContext context, HabitColor? habitColor) {
         return Selector<HabitDetailViewModel, bool>(
           selector: (context, viewmodel) => viewmodel.isHabitArchived,
           shouldRebuild: (previous, next) => previous != next,
@@ -473,8 +491,11 @@ class _PageState extends State<_Page>
             final themeData = Theme.of(context);
             final colorData = themeData.extension<CustomColors>();
             final l10n = L10n.of(context);
-            final color = colorType != null
-                ? colorData?.getColor(colorType)
+            final color = habitColor != null
+                ? colorData?.getColor(
+                    habitColor,
+                    brightness: themeData.brightness,
+                  )
                 : Colors.transparent;
             return AppBarActions<
               DetailAppbarActionItemConfig,
@@ -515,12 +536,12 @@ class _PageState extends State<_Page>
         );
       }
 
-      return Selector<HabitDetailViewModel, HabitColorType?>(
-        selector: (context, viewmodel) => viewmodel.habitColorType,
+      return Selector<HabitDetailViewModel, HabitColor?>(
+        selector: (context, viewmodel) => viewmodel.habitColor,
         shouldRebuild: (previous, next) => previous != next,
-        builder: (context, colorType, child) {
+        builder: (context, habitColor, child) {
           return HabitDetailAppBar(
-            colorType: colorType,
+            color: habitColor,
             title: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Selector<HabitDetailViewModel, String>(
@@ -529,7 +550,7 @@ class _PageState extends State<_Page>
                 builder: (context, title, child) => Text(title),
               ),
             ),
-            actionBuilder: (context) => buildAppbarAction(context, colorType),
+            actionBuilder: (context) => buildAppbarAction(context, habitColor),
           );
         },
       );
@@ -550,7 +571,7 @@ class _PageState extends State<_Page>
           return L10nBuilder(
             builder: (context, l10n) => HabitDetailSummaryTile(
               habitProgress: viewmodel.habitProgress,
-              colorType: viewmodel.habitColorType,
+              color: viewmodel.habitColor,
               isHabitCompleted: viewmodel.isHabitCompleted,
               isHabitArchived: viewmodel.isHabitArchived,
               isHabitDeleted: viewmodel.isHabitDeleted,
@@ -994,23 +1015,24 @@ class _PageState extends State<_Page>
     }
 
     Widget buildFAB(BuildContext context) {
-      return Selector<HabitDetailViewModel, HabitColorType?>(
-        selector: (context, viewmodel) => viewmodel.habitColorType,
+      return Selector<HabitDetailViewModel, HabitColor?>(
+        selector: (context, viewmodel) => viewmodel.habitColor,
         shouldRebuild: (previous, next) => previous != next,
-        builder: (context, habitColorType, child) => HabitDetailFAB(
-          colorType: habitColorType ?? widget.colorType,
+        builder: (context, habitColor, child) => HabitDetailFAB(
+          color: habitColor ?? widget.color,
           onPressed: _openEditDialog,
         ),
       );
     }
 
     Widget buildBody(BuildContext context) {
-      return Selector<HabitDetailViewModel, bool>(
-        selector: (context, viewmodel) => viewmodel.isDataLoading,
-        shouldRebuild: (previous, next) => previous != next,
-        builder: (context, _, child) {
+      return Selector<HabitDetailViewModel, (bool, bool)>(
+        selector: (context, viewmodel) =>
+            (viewmodel.hasLoad, viewmodel.consumeForceReloadFlag()),
+        shouldRebuild: (previous, next) => previous.$1 != next.$1 || next.$2,
+        builder: (context, state, child) {
           return FutureBuilder(
-            future: loadData(),
+            future: _resolveLoadDataFuture(forceReload: state.$2),
             builder: (context, snapshot) {
               final viewmodel = context.read<HabitDetailViewModel>();
               // appLog.load.debug("$widget.buildBody",
@@ -1031,7 +1053,7 @@ class _PageState extends State<_Page>
                     size: const Size.square(
                       kHabitDetailLoadingCircleIndicatorSize,
                     ),
-                    colorType: viewmodel.habitColorType,
+                    color: viewmodel.habitColor,
                   ),
                 );
               } else if (snapshot.hasError) {
@@ -1155,7 +1177,7 @@ class _OtherInfo extends StatelessWidget {
                 ? Text(l10n.habitDetail_habitType_title)
                 : const Text("Habit Type"),
             subTitle: Text(viewmodel.habitType!.getTypeName(l10n)),
-            leading: Icon(viewmodel.habitType!.getIcon()),
+            leading: Icon(viewmodel.habitType!.icon),
           ),
         // reminder
         if (viewmodel.habitDetailData?.data.reminder != null)
@@ -1213,7 +1235,7 @@ class _OtherInfo extends StatelessWidget {
                     .getFormatter(l10n?.localeName)
                     .format(viewmodel.habitDetailData!.createT),
               ),
-              leading: const Icon(HabitCalIcons.calendar_create),
+              leading: const Icon(HabitCalIcons.calendarcreate),
             ),
           ),
         // modified date
@@ -1229,7 +1251,7 @@ class _OtherInfo extends StatelessWidget {
                     .getFormatter(l10n?.localeName)
                     .format(viewmodel.habitDetailData!.modifyT),
               ),
-              leading: const Icon(HabitCalIcons.calendar_modify),
+              leading: const Icon(HabitCalIcons.calendarmodify),
               padding: const EdgeInsets.only(bottom: 6.0),
             ),
           ),
